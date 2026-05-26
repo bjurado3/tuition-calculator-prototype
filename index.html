@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ASU Online Tuition Estimator Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=resident-faq-1" />
+  </head>
+  <body data-view="step-one" data-results-mode="summary">
+    <div class="page-shell">
+      <header class="global-header" aria-label="ASU Online header">
+        <img class="global-header-art" src="./assets/header.bg-white.svg?v=tuition-active-1" alt="ASU Online navigation" />
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="container">
+            <p class="section-kicker">ASU Online tuition estimator</p>
+            <h1>
+              Estimate your online degree
+              <span>tuition and timeline</span>
+            </h1>
+            <p class="hero-copy">
+              See how much online tuition costs each semester and the time it takes to earn your
+              degree below. Plus, get a savings estimate from transfer credits and aid.
+            </p>
+          </div>
+        </section>
+
+        <section class="estimator-section">
+          <div class="container">
+            <div class="estimator-card">
+              <section class="estimator-view is-visible" data-view-panel="step-one">
+                <div class="panel-header">
+                  <span class="highlight-label">Tuition and time estimator</span>
+                  <span class="step-copy">Step 1 of 2</span>
+                </div>
+
+                <div class="step-intro">
+                  <p>Give your details.</p>
+                </div>
+
+                <div class="form-lines">
+                  <div class="line-row">
+                    <span class="line-copy">I'm seeking a</span>
+                    <div class="inline-select" data-select="degree-type">
+                      <button class="line-select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="line-select-label" data-select-label>select a degree type</span>
+                      </button>
+                      <div class="select-menu" role="listbox" hidden>
+                        <button class="select-option" type="button" data-value="undergraduate degree">undergraduate degree</button>
+                        <button class="select-option" type="button" data-value="graduate degree">graduate degree</button>
+                        <button class="select-option" type="button" data-value="graduate certificate">graduate certificate</button>
+                        <button class="select-option" type="button" data-value="undergraduate nondegree">undergraduate nondegree</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="line-row">
+                    <span class="line-copy">in</span>
+                    <div class="inline-select" data-select="program">
+                      <button class="line-select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="line-select-label" data-select-label>select a program</span>
+                      </button>
+                      <div class="select-menu" role="listbox" hidden>
+                        <label class="select-search">
+                          <span class="search-icon" aria-hidden="true">⌕</span>
+                          <input type="search" placeholder="Search..." data-select-search />
+                        </label>
+                        <button class="select-option" type="button" data-value="accountancy">Accountancy</button>
+                        <button class="select-option" type="button" data-value="aerospace engineering">Aerospace Engineering</button>
+                        <button class="select-option" type="button" data-value="applied computing">Applied Computing</button>
+                        <button class="select-option" type="button" data-value="applied ethics in the professions">Applied Ethics in the Professions</button>
+                        <button class="select-option" type="button" data-value="architectural studies">Architectural Studies</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="line-row">
+                    <span class="line-copy">as a</span>
+                    <div class="inline-select" data-select="enrollment-status">
+                      <button class="line-select line-select-credits" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="line-select-label" data-select-label>select enrollment status</span>
+                      </button>
+                      <div class="select-menu" role="listbox" hidden>
+                        <button class="select-option select-option-stacked" type="button" data-value="part-time student">
+                          <span class="select-option-title">Part-time student</span>
+                          <span class="select-option-note">Up to 6 credits per semester</span>
+                        </button>
+                        <button class="select-option select-option-stacked" type="button" data-value="full-time student">
+                          <span class="select-option-title">Full-time student</span>
+                          <span class="select-option-note">12+ credits per semester</span>
+                        </button>
+                        <button class="select-option select-option-stacked" type="button" data-value="custom" data-open-modal-option>
+                          <span class="select-option-title">Enter credits</span>
+                          <span class="select-option-note">Choose your own pace</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel-actions">
+                  <button class="round-cta" type="button" data-go-view="step-two" disabled aria-disabled="true">
+                    <span>Next</span>
+                    <svg class="button-icon" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="M8.2 2.2 13 7l-4.8 4.8-1.1-1.1 2.9-2.9H1V6.2h9L7.1 3.3l1.1-1.1Z" />
+                    </svg>
+                  </button>
+                </div>
+              </section>
+
+              <section class="estimator-view" data-view-panel="resident">
+                <div class="panel-header">
+                  <span class="highlight-label">Tuition and time estimator</span>
+                  <span class="step-copy">Step 1 of 2</span>
+                </div>
+
+                <div class="step-intro">
+                  <p>Give your details.</p>
+                </div>
+
+                <div class="form-lines">
+                  <div class="line-row">
+                    <span class="line-copy">I'm seeking a</span>
+                    <div class="inline-select" data-select="degree-type">
+                      <button class="line-select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="line-select-label" data-select-label>select a degree type</span>
+                      </button>
+                      <div class="select-menu" role="listbox" hidden>
+                        <button class="select-option" type="button" data-value="undergraduate degree">undergraduate degree</button>
+                        <button class="select-option" type="button" data-value="graduate degree">graduate degree</button>
+                        <button class="select-option" type="button" data-value="graduate certificate">graduate certificate</button>
+                        <button class="select-option" type="button" data-value="undergraduate nondegree">undergraduate nondegree</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="line-row">
+                    <span class="line-copy">in</span>
+                    <div class="inline-select" data-select="program">
+                      <button class="line-select" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="line-select-label" data-select-label>select a program</span>
+                      </button>
+                      <div class="select-menu" role="listbox" hidden>
+                        <label class="select-search">
+                          <span class="search-icon" aria-hidden="true">⌕</span>
+                          <input type="search" placeholder="Search..." data-select-search />
+                        </label>
+                        <button class="select-option" type="button" data-value="accountancy">Accountancy</button>
+                        <button class="select-option" type="button" data-value="aerospace engineering">Aerospace Engineering</button>
+                        <button class="select-option" type="button" data-value="applied computing">Applied Computing</button>
+                        <button class="select-option" type="button" data-value="applied ethics in the professions">Applied Ethics in the Professions</button>
+                        <button class="select-option" type="button" data-value="architectural studies">Architectural Studies</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="line-row">
+                    <span class="line-copy">as a</span>
+                    <div class="inline-select" data-select="enrollment-status">
+                      <button class="line-select line-select-credits" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="line-select-label" data-select-label>full-time student</span>
+                      </button>
+                      <div class="select-menu" role="listbox" hidden>
+                        <button class="select-option select-option-stacked" type="button" data-value="part-time student">
+                          <span class="select-option-title">Part-time student</span>
+                          <span class="select-option-note">Up to 6 credits per semester</span>
+                        </button>
+                        <button class="select-option select-option-stacked" type="button" data-value="full-time student">
+                          <span class="select-option-title">Full-time student</span>
+                          <span class="select-option-note">12+ credits per semester</span>
+                        </button>
+                        <button class="select-option select-option-stacked" type="button" data-value="custom" data-open-modal-option>
+                          <span class="select-option-title">Enter credits</span>
+                          <span class="select-option-note">Choose your own pace</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="residency-row">
+                  <div>
+                    <p class="residency-question">and I'm an Arizona resident</p>
+                    <p class="help-copy">
+                      We don't have out-of-state tuition up to 11 credit hours.
+                      <a href="#faq-out-of-state-tuition" data-open-faq>Learn more.</a>
+                    </p>
+                  </div>
+                  <div class="toggle-group" aria-label="Arizona residency">
+                    <button class="toggle-button" type="button">Yes</button>
+                    <button class="toggle-button is-selected" type="button">No</button>
+                  </div>
+                </div>
+
+                <div class="panel-actions">
+                  <button class="round-cta" type="button" data-go-view="step-two" disabled aria-disabled="true">
+                    <span>Next</span>
+                    <svg class="button-icon" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="M8.2 2.2 13 7l-4.8 4.8-1.1-1.1 2.9-2.9H1V6.2h9L7.1 3.3l1.1-1.1Z" />
+                    </svg>
+                  </button>
+                </div>
+              </section>
+
+              <section class="estimator-view" data-view-panel="step-two">
+                <div class="panel-header">
+                  <div>
+                    <h2 class="detail-title">
+                      Add your details to see how you can
+                      <span>reduce cost and time</span>
+                    </h2>
+                    <p class="detail-copy">
+                      Provide any information you know or leave it blank.
+                      <a href="#faq-tuition">Learn more</a> about ways to reduce your cost and time in our FAQ below.
+                    </p>
+                  </div>
+                  <span class="step-copy">Step 2 of 2</span>
+                </div>
+
+                <a class="skip-link" href="#" data-go-view="results">
+                  <span>Skip this step</span>
+                  <img class="skip-link-icon" src="./assets/right-arrow.svg" alt="" />
+                </a>
+
+                <div class="detail-grid">
+                  <article class="detail-row">
+                    <div>
+                      <h3>Transfer credits</h3>
+                      <p class="detail-question">How many college course credits do you plan to transfer to ASU?</p>
+                      <p class="detail-note">
+                        Transferring credits can reduce how long it takes to finish your degree.
+                        <a href="#faq-tuition">Learn more about transfer credits.</a>
+                      </p>
+                    </div>
+                    <label class="detail-value detail-input-field">
+                      <input
+                        class="detail-input"
+                        type="number"
+                        min="0"
+                        value="0"
+                        inputmode="numeric"
+                        aria-label="Transfer credits"
+                      />
+                      <span class="detail-suffix">credits</span>
+                    </label>
+                  </article>
+
+                  <article class="detail-row">
+                    <div>
+                      <h3>Grants</h3>
+                      <p class="detail-question">How much do you expect to receive each year in grants?</p>
+                      <p class="detail-note">
+                        Grants are funds you don't need to pay back.
+                        <a href="#faq-tuition">Learn more about grants.</a>
+                      </p>
+                    </div>
+                    <label class="detail-value detail-input-field">
+                      <span class="detail-prefix">$</span>
+                      <input
+                        class="detail-input detail-input-currency"
+                        type="number"
+                        min="0"
+                        value="0"
+                        inputmode="numeric"
+                        aria-label="Annual grants amount"
+                      />
+                    </label>
+                  </article>
+
+                  <article class="detail-row">
+                    <div>
+                      <h3>Scholarships</h3>
+                      <p class="detail-question">How much do you expect to receive each year in scholarship?</p>
+                      <p class="detail-note">
+                        Scholarships are often merit-based awards you don't pay back.
+                        <a href="#faq-tuition">Learn more about scholarships.</a>
+                      </p>
+                    </div>
+                    <label class="detail-value detail-input-field">
+                      <span class="detail-prefix">$</span>
+                      <input
+                        class="detail-input detail-input-currency"
+                        type="number"
+                        min="0"
+                        value="0"
+                        inputmode="numeric"
+                        aria-label="Annual scholarships amount"
+                      />
+                    </label>
+                  </article>
+
+                  <article class="detail-row">
+                    <div>
+                      <h3>Employer tuition benefit</h3>
+                      <p class="detail-question">
+                        Do you have an employer that offers a tuition coverage or reimbursement each year?
+                      </p>
+                      <p class="detail-note">Some employers help with tuition costs.</p>
+                    </div>
+                    <label class="detail-value detail-input-field">
+                      <span class="detail-prefix">$</span>
+                      <input
+                        class="detail-input detail-input-currency"
+                        type="number"
+                        min="0"
+                        value="0"
+                        inputmode="numeric"
+                        aria-label="Annual employer tuition benefit amount"
+                      />
+                    </label>
+                  </article>
+                </div>
+
+                <div class="detail-actions">
+                  <button class="ghost-link" type="button" data-go-view="resident">Back</button>
+                  <button class="round-cta" type="button" data-go-view="results">View cost breakdown</button>
+                </div>
+              </section>
+
+              <section class="estimator-view" data-view-panel="results">
+                <div class="result-tabs">
+                  <button class="result-tab is-active" type="button">2025-2026</button>
+                  <button class="result-tab" type="button">2026-2027</button>
+                </div>
+
+                <div class="summary-grid">
+                  <div class="price-panel">
+                    <p class="summary-label">Your semester total for 12 credits:</p>
+                    <p class="price-total">$3,296</p>
+                  </div>
+                  <div class="metric-stack">
+                    <div class="metric-card">
+                      <img class="metric-icon" src="./assets/calendar.svg" alt="" aria-hidden="true" />
+                      <span class="metric-label">Completion time:</span>
+                      <span class="metric-value">
+                        <strong>3.5 years</strong>
+                        <button
+                          class="tooltip-trigger"
+                          type="button"
+                          aria-label="Show completion time details"
+                          aria-describedby="completion-tooltip"
+                        >
+                          <img class="tooltip-icon" src="./assets/info-icon.svg" alt="" aria-hidden="true" />
+                        </button>
+                        <span class="estimate-tooltip" id="completion-tooltip" role="tooltip">
+                          If you take 12 credits each semester, you can complete your degree in this time.
+                        </span>
+                      </span>
+                    </div>
+                    <div class="metric-card">
+                      <img class="metric-icon" src="./assets/cost.svg" alt="" aria-hidden="true" />
+                      <span class="metric-label">Estimated total cost:</span>
+                      <span class="metric-value">
+                        <strong>$77,000</strong>
+                        <button
+                          class="tooltip-trigger"
+                          type="button"
+                          aria-label="Show estimated total cost details"
+                          aria-describedby="cost-tooltip"
+                        >
+                          <img class="tooltip-icon" src="./assets/info-icon.svg" alt="" aria-hidden="true" />
+                        </button>
+                        <span class="estimate-tooltip estimate-tooltip-wide" id="cost-tooltip" role="tooltip">
+                          This is only an estimate cost based on today's tuition costs. Your final total cost will be
+                          determined based on how many courses you take, transfer credits we accept and the tuition
+                          cost for each academic year.
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="results-layout">
+                  <aside class="selection-summary selection-summary-view">
+                    <div class="selection-block">
+                      <span>Program</span>
+                      <strong>Undergraduate</strong>
+                      <a href="#">Human Systems Engineering</a>
+                    </div>
+                    <div class="selection-block">
+                      <span>Transfer credits</span>
+                      <strong>24 credits</strong>
+                    </div>
+                    <div class="selection-block">
+                      <span>Credits per semester</span>
+                      <strong>12 credits</strong>
+                    </div>
+                    <div class="selection-block" data-residency-summary hidden>
+                      <span>Arizona resident</span>
+                      <strong data-residency-answer>No</strong>
+                    </div>
+                    <div class="selection-block">
+                      <span>Grants and scholarships</span>
+                      <strong>$15,000/year</strong>
+                    </div>
+                    <div class="selection-block">
+                      <span>Employee tuition benefit</span>
+                      <strong>$0/year</strong>
+                    </div>
+
+                    <button class="inline-action" type="button" data-edit-results>
+                      <img class="button-leading-icon" src="./assets/edit-selection-icon.svg" alt="" />
+                      Edit your selections
+                    </button>
+                  </aside>
+
+                  <aside class="selection-editor">
+                    <div class="edit-group">
+                      <label class="edit-label" for="edit-degree-type">Program</label>
+                      <select class="edit-select" id="edit-degree-type">
+                        <option>Undergraduate</option>
+                        <option>Graduate</option>
+                        <option>Graduate certificate</option>
+                      </select>
+                      <select class="edit-select" aria-label="Program">
+                        <option>Human Systems Engineering</option>
+                        <option>Accountancy</option>
+                        <option>Aerospace Engineering</option>
+                      </select>
+                    </div>
+
+                    <div class="edit-group">
+                      <label class="edit-label" for="edit-summer">Summer sessions</label>
+                      <select class="edit-select" id="edit-summer">
+                        <option>Yes</option>
+                        <option>No</option>
+                      </select>
+                    </div>
+
+                    <div class="edit-group">
+                      <label class="edit-label" for="edit-student-type">Student type</label>
+                      <select class="edit-select" id="edit-student-type">
+                        <option value="select enrollment status" selected>select enrollment status</option>
+                        <option value="part-time student">Part-time student</option>
+                        <option value="full-time student">Full-time student</option>
+                        <option value="custom">Enter credits</option>
+                      </select>
+                      <select class="edit-select" aria-label="Credits per semester">
+                        <option>12 credits</option>
+                        <option>6 credits</option>
+                        <option>Enter credits</option>
+                      </select>
+                    </div>
+
+                    <div class="edit-group" data-edit-residency-group hidden>
+                      <label class="edit-label" for="edit-resident">Arizona resident</label>
+                      <p class="edit-help">
+                        We don't have out-of-state tuition up to 11 credit hours.
+                        <a href="#faq-out-of-state-tuition" data-open-faq>Learn more.</a>
+                      </p>
+                      <select class="edit-select" id="edit-resident">
+                        <option value="yes">Yes</option>
+                        <option value="no" selected>No</option>
+                      </select>
+                    </div>
+
+                    <div class="edit-group">
+                      <label class="edit-label" for="edit-transfer">Transfer credits</label>
+                      <input class="edit-input" id="edit-transfer" type="text" value="24 credits" />
+                    </div>
+
+                    <div class="edit-group">
+                      <label class="edit-label" for="edit-grants">Grants</label>
+                      <input class="edit-input" id="edit-grants" type="text" value="$15,000/year" />
+                    </div>
+
+                    <div class="edit-group">
+                      <label class="edit-label" for="edit-employer-benefit">Employer tuition benefit</label>
+                      <input class="edit-input" id="edit-employer-benefit" type="text" value="$0/year" />
+                    </div>
+
+                    <button class="inline-action recalculate-action" type="button" data-recalculate-results>
+                      <img class="button-leading-icon" src="./assets/recalculate-icon.svg" alt="" />
+                      Recalculate
+                    </button>
+                  </aside>
+
+                  <div class="breakdown-column">
+                    <label class="summer-toggle">
+                      <input type="checkbox" checked />
+                      <span>Include summers</span>
+                    </label>
+
+                    <div class="term-card is-open">
+                      <button class="term-header" type="button" aria-expanded="true">
+                        <span>Fall 2026</span>
+                        <span class="term-price">$3,296</span>
+                        <span class="term-chevron">⌄</span>
+                      </button>
+                      <div class="term-body">
+                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$3,444</strong></div>
+                        <div class="cost-row"><span>Undergraduate College Fee 4</span><strong>$744</strong></div>
+                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$46</strong></div>
+                        <div class="cost-row"><span>Grants, Scholarships, Employer Benefit</span><strong class="credit-green">- $938</strong></div>
+                        <div class="cost-row total-row"><span>Total</span><strong>$3,296</strong></div>
+                      </div>
+                    </div>
+
+                    <div class="term-card">
+                      <button class="term-header" type="button" aria-expanded="false">
+                        <span>Fall 2027</span>
+                        <span class="term-price">$3,296</span>
+                        <span class="term-chevron">⌄</span>
+                      </button>
+                      <div class="term-body" hidden>
+                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$3,444</strong></div>
+                        <div class="cost-row"><span>Undergraduate College Fee 4</span><strong>$744</strong></div>
+                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$46</strong></div>
+                        <div class="cost-row"><span>Grants, Scholarships, Employer Benefit</span><strong class="credit-green">- $938</strong></div>
+                        <div class="cost-row total-row"><span>Total</span><strong>$3,296</strong></div>
+                      </div>
+                    </div>
+
+                    <div class="term-card">
+                      <button class="term-header" type="button" aria-expanded="false">
+                        <span>Summer 2027</span>
+                        <span class="term-price">$3,296</span>
+                        <span class="term-chevron">⌄</span>
+                      </button>
+                      <div class="term-body" hidden>
+                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$3,444</strong></div>
+                        <div class="cost-row"><span>Undergraduate College Fee 4</span><strong>$744</strong></div>
+                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$46</strong></div>
+                        <div class="cost-row"><span>Grants, Scholarships, Employer Benefit</span><strong class="credit-green">- $938</strong></div>
+                        <div class="cost-row total-row"><span>Total</span><strong>$3,296</strong></div>
+                      </div>
+                    </div>
+
+                    <div class="year-total">
+                      <span>Academic Year Total</span>
+                      <strong>$9,888</strong>
+                    </div>
+
+                    <div class="disclaimer-card">
+                      <p>
+                        This is not a bill. This is only an estimate. This may not be accurate.
+                        <a href="#">Talk with your enrollment coach.</a>
+                        Special class fees are dependent on specific class enrollment and are not included here.
+                      </p>
+                      <a href="#" class="fees-link" data-open-fees-modal>What are these fees?</a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="next-step-section">
+          <div class="container">
+            <a href="#" class="restart-link" data-go-view="step-one">
+              <img class="restart-icon" src="./assets/start-over-icon.svg" alt="" />
+              <span>Start over</span>
+            </a>
+            <div class="next-step-card">
+              <img class="next-step-graphic next-step-graphic-left" src="./assets/take-next-step-chat.png" alt="" />
+              <div class="next-step-copy">
+                <h2>Take the <span>next step</span></h2>
+                <p>Our enrollment coaches are available to chat about your tuition estimate and more.</p>
+              </div>
+              <div class="next-step-actions">
+                <a href="#" class="secondary-cta secondary-cta-dark">Request info</a>
+                <a href="#" class="secondary-cta">Start your application</a>
+              </div>
+              <img class="next-step-graphic next-step-graphic-right" src="./assets/take-next-step-envelope.png" alt="" />
+            </div>
+          </div>
+        </section>
+
+        <section class="story-section">
+          <div class="container">
+            <div class="story-card">
+              <img class="story-section-art" src="./assets/turning-education-section.svg" alt="" />
+              <div class="story-copy">
+                <h2>Turning education<br />into opportunity</h2>
+                <p>
+                  A degree from ASU can boost economic prospects for you, your family and your
+                  community.
+                </p>
+                <p>
+                  You'll gain real career skills from expert faculty, which is why we're ranked #2 in
+                  the U.S. for employability among public universities.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="value-section">
+          <div class="container value-grid">
+            <img class="video-card" src="./assets/net-price-video.svg" alt="" />
+            <div class="value-copy">
+              <h2>Understand your net price</h2>
+              <p>
+                While tuition and fee estimates can look overwhelming, your net online tuition price
+                provides a better estimate of how much money you'll actually spend on your college
+                degree. Your net price is the cost of tuition and fees subtracted by any college
+                financial aid such as grants, scholarships, tuition waivers and other types of
+                federal aid.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-section" id="faq-tuition">
+          <div class="container">
+            <div class="faq-heading">
+              <h2>FAQ about tuition</h2>
+            </div>
+            <div class="faq-list">
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>Are online degrees more affordable?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    As you can see in the tuition and timeline estimator, your tuition costs vary depending on a
+                    variety of factors, including financial aid, scholarships and employer benefits. Your transfer
+                    credits can play a role, too. In addition to using this estimator,
+                    <a href="#">we recommend you work with your enrollment coach and a financial aid advisor</a>
+                    to determine costs for earning a degree.
+                  </p>
+                  <p>
+                    Tuition for online programs is generally lower than an in-person program, especially for
+                    out-of-state students. For Arizona residents, online tuition is less than in-person for the
+                    first 11 credit hours. For anything over 11 credit hours, online and in-person tuition is the same.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item" id="faq-out-of-state-tuition">
+                <button class="faq-button" type="button">
+                  <span>Does ASU Online have out-of-state tuition?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    There is no out-of-state tuition for up to 11 credit hours each semester.
+                  </p>
+                  <p>
+                    However, Arizona residents benefit from a tuition cap at 11 credit hours. This means your
+                    tuition will not increase with any additional credits you take that semester.
+                  </p>
+                  <p>
+                    Out-of-state students don't receive a tuition cap, so taking a heavier course load each
+                    semester may lead to higher overall tuition costs.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>What are the fees included with my tuition estimate?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    ASU tuition and fees are approved annually by the Arizona Board of Regents. The Undergraduate
+                    College Fee 1-4 is the average for instructional costs based on your program. The Student
+                    Initiated Fee includes funding for clubs, organizations, health and counseling services and
+                    other student experience costs. The Graduate Student Support Fee helps fund graduate student
+                    resources and services including technology, instructional and laboratory expenses. For more
+                    details, <a href="#">visit the ASU tuition and fees page</a>.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>Are textbooks and computers included in tuition?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    No, textbook and computer costs are not included in tuition. However, depending on your courses
+                    and textbooks, there may be opportunities to save, such as purchasing used textbooks or
+                    electronic copies of textbooks at a lower rate.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>What are grants and scholarships? What financial aid can I get?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    Financial aid is money that can help you cover education expenses such as tuition, books and
+                    course fees. <a href="#">Explore financial aid.</a>
+                  </p>
+                  <p>
+                    Federal aid: Federal aid can be need-based or non-need-based. Both are dependent on your income,
+                    background and other qualifications. You must be a U.S. citizen or an eligible non-citizen and
+                    submit the FAFSA (Free Application for Federal Student Aid) every year to receive federal aid.
+                    <br />
+                    Grants: Grants are need-based aid that doesn't require repayment.
+                    <br />
+                    Loans: Subsidized (need-based) and unsubsidized (non-need-based) loans are money you borrow and
+                    must pay back with interest.
+                    <br />
+                    Scholarships: Another form of free financial aid, scholarships may be need-based or merit-based.
+                    Everyone, including international students, may apply.
+                    <br />
+                    Employer tuition benefits: Our corporate partnerships, including Starbucks, Uber and more,
+                    support their employees with tuition assistance or reimbursement programs. Connect with your
+                    employer to ask about any existing options.
+                    <br />
+                    Military benefits: If you're a veteran, active-duty service member or dependent, you may be
+                    eligible for benefits such as tuition assistance or scholarships.
+                    <br />
+                    Transfer credit: Transferring college credits to ASU can lower your tuition costs, as you won't
+                    have to pay for credits you've already earned.
+                  </p>
+                  <p>
+                    Use our <a href="#">college budget</a> worksheet to create an annual budget for your ASU costs.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>What is the FAFSA?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    The Free Application for Federal Student Aid (FAFSA) is an application you fill out to determine
+                    your eligibility for financial aid, such as federal grants and loans.
+                  </p>
+                  <p>
+                    You must submit the FAFSA every year if you want to receive federal aid. Most U.S. citizens or
+                    eligible noncitizens will receive aid if they demonstrate financial need. Completing the
+                    application helps make college more affordable by providing assistance based on your specific
+                    financial situation. <a href="#">Learn more about the FAFSA.</a>
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>Do the One Big Beautiful Bill Act's federal student loan updates impact ASU Online costs?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    The One Big Beautiful Bill Act does not change ASU Online costs, but it might impact how much
+                    you can borrow each academic year. <a href="#">Use our loan estimator</a> to estimate your
+                    federal loans compared to tuition costs. You can also <a href="#">explore our resource</a> to
+                    learn more about the student loan borrowing changes.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>How do online classes work?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    Online classes are accelerated where each semester is split into a session A and B where you'll
+                    take classes. In fall and spring, classes are 7.5 weeks and 6 weeks in the summer. Online
+                    students typically take 1-2 courses per session.
+                  </p>
+                  <p>
+                    It's recommended that you take classes all three semesters to stay on track and graduate on time.
+                    Learn more about the <a href="#">online course experience</a>.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>Will I pay my tuition by semester?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    At ASU Online, each semester is split into two sessions: A and B.
+                  </p>
+                  <p>
+                    Tuition is charged per session, and your bill will show session A and session B separately.
+                  </p>
+                  <p>
+                    Federal financial aid is awarded and disbursed by semester (fall, spring and summer). Grants,
+                    scholarships, employer benefits and most other forms of aid cover the full semester, whether you
+                    take classes in one or both sessions. If you're only enrolled in session B, your financial aid
+                    will disburse seven days before the session begins.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
+                  <span>How do I submit payment for my tuition?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    You have different options for paying your tuition, including paying online with credit or debit
+                    cards, mail-in checks, eChecks (electronic check payment) or Flywire for international payments.
+                    Review all tuition payment options.
+                  </p>
+                  <p>
+                    ASU has a payment plan that offers the option to pay for your tuition or other college costs over
+                    three installments within the semester. Depending on residency status, students pay $50-$200 to
+                    enroll in the plan. Get more details about the ASU payment plan.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="support-section">
+          <div class="container">
+            <div class="support-heading">
+              <h2>Connect with a financial aid expert</h2>
+              <p>
+                You're not alone: ASU has a team of support available to help you navigate the
+                complexities of paying for college.
+              </p>
+            </div>
+            <div class="support-grid">
+              <article class="support-card">
+                <img class="support-icon" src="./assets/call.svg" alt="" />
+                <h3>Call</h3>
+                <p>Call to speak with an enrollment coach about financial aid and how to pay for college.</p>
+                <a href="#" class="support-pill">866-277-6589</a>
+              </article>
+              <article class="support-card">
+                <img class="support-icon" src="./assets/laptop.svg" alt="" />
+                <h3>Email</h3>
+                <p>Email an enrollment coach with your tuition and financial aid questions.</p>
+                <a href="#" class="support-pill">Email</a>
+              </article>
+              <article class="support-card">
+                <img class="support-icon" src="./assets/location-pin.svg" alt="" />
+                <h3>Visit</h3>
+                <p>Visit one of our four campus locations to speak with a financial aid advisor in person.</p>
+                <a href="#" class="support-pill">Locations</a>
+              </article>
+              <article class="support-card">
+                <img class="support-icon" src="./assets/user-headset.svg" alt="" />
+                <h3>Live chat</h3>
+                <p>Students already admitted to ASU can open a chat to speak with one of our financial aid advisors.</p>
+                <a href="#" class="support-pill">Chat</a>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="cta-form-section">
+          <div class="rfi-layout">
+            <div class="rfi-media" aria-hidden="true">
+              <img src="./assets/rfi-photo.jpg" alt="" />
+            </div>
+            <div class="rfi-panel">
+              <form class="rfi-form">
+                <p class="rfi-step">Step 1 of 2</p>
+                <h2>Get started today</h2>
+                <p class="rfi-copy">
+                  To learn more about ASU Online or a specific program, fill out the form below
+                  and check your email for information on next steps.
+                </p>
+                <p class="rfi-required">* Indicates a required field</p>
+
+                <label class="rfi-field">
+                  <span>* Degree type</span>
+                  <select class="rfi-select">
+                    <option>Select a degree type</option>
+                    <option>Undergraduate degree</option>
+                    <option>Graduate degree</option>
+                    <option>Graduate certificate</option>
+                  </select>
+                </label>
+
+                <label class="rfi-field">
+                  <span>Area of interest</span>
+                  <select class="rfi-select">
+                    <option>Select interest area</option>
+                    <option>Business</option>
+                    <option>Engineering</option>
+                    <option>Health and nursing</option>
+                    <option>Technology</option>
+                  </select>
+                </label>
+
+                <label class="rfi-field">
+                  <span>*Program</span>
+                  <select class="rfi-select">
+                    <option>Select program</option>
+                    <option>Accountancy</option>
+                    <option>Aerospace Engineering</option>
+                    <option>Applied Computing</option>
+                  </select>
+                </label>
+
+                <fieldset class="rfi-radio-field">
+                  <legend>*Have you served in the U.S. military or are you a military dependent?</legend>
+                  <label><input type="radio" name="military" /> <span>Yes</span></label>
+                  <label><input type="radio" name="military" /> <span>No</span></label>
+                </fieldset>
+
+                <button class="rfi-submit" type="button">Next</button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="global-footer" aria-label="ASU Online footer">
+        <img class="global-footer-art" src="./assets/footer.svg" alt="ASU Online footer links and contact information" />
+      </footer>
+
+    </div>
+
+    <div class="modal-backdrop" hidden></div>
+    <div class="credit-modal" role="dialog" aria-modal="true" aria-labelledby="credit-modal-title" hidden>
+      <button class="modal-close" type="button" aria-label="Close" data-close-modal>×</button>
+      <h2 id="credit-modal-title">Enter your credits</h2>
+      <p class="modal-copy">Select how many credits you plan to take this semester.</p>
+      <div class="modal-tag">Add credits</div>
+      <div class="credit-stepper">
+        <button class="stepper-button" type="button" data-credit-change="-1">−</button>
+        <div class="credit-display">
+          <span id="credit-count">0</span>
+        </div>
+        <button class="stepper-button" type="button" data-credit-change="1">+</button>
+      </div>
+      <p class="credit-label">credits</p>
+      <p class="credit-helper">3 credits typically equals 1 course.</p>
+      <div class="modal-actions">
+        <button class="modal-link" type="button" data-close-modal>Cancel</button>
+        <button class="round-cta" type="button" id="save-credit-load">Save credit load</button>
+      </div>
+    </div>
+
+    <div class="fees-modal" role="dialog" aria-modal="true" aria-labelledby="fees-modal-title" hidden>
+      <button class="modal-close" type="button" aria-label="Close" data-close-modal>×</button>
+      <p id="fees-modal-title">
+        <strong>Fee information:</strong> ASU tuition and fees are approved annually by the Arizona Board of Regents.
+        The Undergraduate College Fee 1–4 is the average for instructional costs based on your program. The Student
+        Initiated Fee includes funding for clubs, organizations, health and counseling services and other student
+        experience costs. The Graduate Student Support Fee helps fund graduate student resources and services including
+        technology, instructional and laboratory expenses. For more details, visit the
+        <a href="#">ASU tuition and fees page.</a>
+      </p>
+    </div>
+
+    <script src="./script.js?v=resident-faq-1"></script>
+  </body>
+</html>
