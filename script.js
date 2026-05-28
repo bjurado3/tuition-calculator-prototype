@@ -20,6 +20,14 @@ const editResultsButtons = document.querySelectorAll("[data-edit-results]");
 const recalculateResultsButtons = document.querySelectorAll("[data-recalculate-results]");
 const editStudentTypeSelect = document.getElementById("edit-student-type");
 const editResidentSelect = document.getElementById("edit-resident");
+const editTransferInput = document.getElementById("edit-transfer");
+const editGrantsInput = document.getElementById("edit-grants");
+const editScholarshipsInput = document.getElementById("edit-scholarships");
+const editEmployerBenefitInput = document.getElementById("edit-employer-benefit");
+const summaryTransfer = document.querySelector("[data-summary-transfer]");
+const summaryCredits = document.querySelector("[data-summary-credits]");
+const summaryAid = document.querySelector("[data-summary-aid]");
+const summaryBenefit = document.querySelector("[data-summary-benefit]");
 const editResidencyGroup = document.querySelector("[data-edit-residency-group]");
 const residencySummary = document.querySelector("[data-residency-summary]");
 const residencyAnswer = document.querySelector("[data-residency-answer]");
@@ -38,6 +46,10 @@ const estimatorState = {
   "enrollment-status": defaultSelectValues["enrollment-status"],
   "resident-choice": "no",
   credits: 0,
+  transferCredits: 0,
+  grants: 0,
+  scholarships: 0,
+  employerBenefit: 0,
 };
 
 function setView(view) {
@@ -58,11 +70,68 @@ function isFullTimeStudent() {
   return estimatorState["enrollment-status"] === "full-time student";
 }
 
+function formatCurrency(value) {
+  return Math.max(0, Number(value) || 0).toLocaleString("en-US");
+}
+
+function getCreditsPerSemesterLabel() {
+  if (estimatorState["enrollment-status"] === "custom") {
+    return estimatorState.credits > 0 ? `${estimatorState.credits} credits` : "0 credits";
+  }
+
+  if (estimatorState["enrollment-status"] === "part-time student") {
+    return "6 credits";
+  }
+
+  return "12 credits";
+}
+
 function syncEditResidencyVisibility() {
   const shouldShowResidency = editStudentTypeSelect?.value === "full-time student";
 
   if (editResidencyGroup) {
     editResidencyGroup.hidden = !shouldShowResidency;
+  }
+}
+
+const summaryLabel = document.querySelector("[data-summary-label]");
+
+function syncSummaryFromState() {
+  if (summaryLabel) {
+    summaryLabel.textContent = `Your semester total for ${getCreditsPerSemesterLabel()}:`;
+  }
+
+  if (summaryTransfer) {
+    summaryTransfer.textContent = `${estimatorState.transferCredits} credits`;
+  }
+
+  if (summaryCredits) {
+    summaryCredits.textContent = getCreditsPerSemesterLabel();
+  }
+
+  if (summaryAid) {
+    const aidTotal = estimatorState.grants + estimatorState.scholarships;
+    summaryAid.textContent = `$${formatCurrency(aidTotal)}/year`;
+  }
+
+  if (summaryBenefit) {
+    summaryBenefit.textContent = `$${formatCurrency(estimatorState.employerBenefit)}/year`;
+  }
+
+  if (editTransferInput) {
+    editTransferInput.value = String(estimatorState.transferCredits);
+  }
+
+  if (editGrantsInput) {
+    editGrantsInput.value = String(estimatorState.grants);
+  }
+
+  if (editScholarshipsInput) {
+    editScholarshipsInput.value = String(estimatorState.scholarships);
+  }
+
+  if (editEmployerBenefitInput) {
+    editEmployerBenefitInput.value = String(estimatorState.employerBenefit);
   }
 }
 
@@ -74,7 +143,7 @@ function syncResultsFromState() {
   }
 
   if (residencyAnswer) {
-    residencyAnswer.textContent = estimatorState["resident-choice"] === "yes" ? "Yes" : "No";
+    residencyAnswer.textContent = estimatorState["resident-choice"] === "yes" ? "Arizona resident" : "Non-resident";
   }
 
   if (editStudentTypeSelect) {
@@ -85,6 +154,7 @@ function syncResultsFromState() {
     editResidentSelect.value = estimatorState["resident-choice"];
   }
 
+  syncSummaryFromState();
   syncEditResidencyVisibility();
 }
 
@@ -114,8 +184,8 @@ function syncSelectLabels() {
 }
 
 function hasStepOneSelection() {
-  return Object.entries(defaultSelectValues).some(
-    ([selectName, defaultValue]) => estimatorState[selectName] !== defaultValue
+  return ["degree-type", "program", "enrollment-status"].every(
+    (selectName) => estimatorState[selectName] !== defaultSelectValues[selectName]
   );
 }
 
@@ -258,6 +328,22 @@ recalculateResultsButtons.forEach((button) => {
       estimatorState["resident-choice"] = editResidentSelect.value;
     }
 
+    if (editTransferInput) {
+      estimatorState.transferCredits = Number(editTransferInput.value || 0);
+    }
+
+    if (editGrantsInput) {
+      estimatorState.grants = Number(editGrantsInput.value || 0);
+    }
+
+    if (editScholarshipsInput) {
+      estimatorState.scholarships = Number(editScholarshipsInput.value || 0);
+    }
+
+    if (editEmployerBenefitInput) {
+      estimatorState.employerBenefit = Number(editEmployerBenefitInput.value || 0);
+    }
+
     syncSelectLabels();
     syncResultsFromState();
     body.dataset.resultsMode = "summary";
@@ -379,7 +465,27 @@ searchInputs.forEach((input) => {
 
 detailInputs.forEach((input) => {
   syncDetailInputWidth(input);
-  input.addEventListener("input", () => syncDetailInputWidth(input));
+  input.addEventListener("input", () => {
+    syncDetailInputWidth(input);
+
+    if (input.dataset.stepTwoKey === "transferCredits") {
+      estimatorState.transferCredits = Number(input.value || 0);
+    }
+
+    if (input.dataset.stepTwoKey === "grants") {
+      estimatorState.grants = Number(input.value || 0);
+    }
+
+    if (input.dataset.stepTwoKey === "scholarships") {
+      estimatorState.scholarships = Number(input.value || 0);
+    }
+
+    if (input.dataset.stepTwoKey === "employerBenefit") {
+      estimatorState.employerBenefit = Number(input.value || 0);
+    }
+
+    syncSummaryFromState();
+  });
 });
 
 closeModalButtons.forEach((button) => {
@@ -409,6 +515,14 @@ saveCreditLoadButton.addEventListener("click", () => {
   setView("step-one");
 });
 
+const residentHelpNo = document.querySelector('[data-resident-help="no"]');
+const residentHelpYes = document.querySelector('[data-resident-help="yes"]');
+
+function syncResidentHelp(choice) {
+  if (residentHelpNo) residentHelpNo.hidden = choice === "yes";
+  if (residentHelpYes) residentHelpYes.hidden = choice !== "yes";
+}
+
 document.querySelectorAll(".toggle-group").forEach((group) => {
   const buttons = group.querySelectorAll(".toggle-button");
 
@@ -417,6 +531,7 @@ document.querySelectorAll(".toggle-group").forEach((group) => {
       buttons.forEach((item) => item.classList.remove("is-selected"));
       button.classList.add("is-selected");
       estimatorState["resident-choice"] = button.textContent.trim().toLowerCase();
+      syncResidentHelp(estimatorState["resident-choice"]);
       syncResultsFromState();
     });
   });

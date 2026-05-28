@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=resident-faq-1" />
+    <link rel="stylesheet" href="./styles.css?v=tuition-updates-2" />
   </head>
   <body data-view="step-one" data-results-mode="summary">
     <div class="page-shell">
@@ -89,7 +89,7 @@
                       <div class="select-menu" role="listbox" hidden>
                         <button class="select-option select-option-stacked" type="button" data-value="part-time student">
                           <span class="select-option-title">Part-time student</span>
-                          <span class="select-option-note">Up to 6 credits per semester</span>
+                          <span class="select-option-note">Typically 6 credits per semester</span>
                         </button>
                         <button class="select-option select-option-stacked" type="button" data-value="full-time student">
                           <span class="select-option-title">Full-time student</span>
@@ -167,7 +167,7 @@
                       <div class="select-menu" role="listbox" hidden>
                         <button class="select-option select-option-stacked" type="button" data-value="part-time student">
                           <span class="select-option-title">Part-time student</span>
-                          <span class="select-option-note">Up to 6 credits per semester</span>
+                          <span class="select-option-note">Typically 6 credits per semester</span>
                         </button>
                         <button class="select-option select-option-stacked" type="button" data-value="full-time student">
                           <span class="select-option-title">Full-time student</span>
@@ -185,9 +185,12 @@
                 <div class="residency-row">
                   <div>
                     <p class="residency-question">and I'm an Arizona resident</p>
-                    <p class="help-copy">
+                    <p class="help-copy" data-resident-help="no">
                       We don't have out-of-state tuition up to 11 credit hours.
                       <a href="#faq-out-of-state-tuition" data-open-faq>Learn more.</a>
+                    </p>
+                    <p class="help-copy" data-resident-help="yes" hidden>
+                      Your tuition will be capped at <strong>11 credit hours</strong> each semester, meaning your tuition will not increase with any additional credits you take.
                     </p>
                   </div>
                   <div class="toggle-group" aria-label="Arizona residency">
@@ -213,18 +216,17 @@
                       Add your details to see how you can
                       <span>reduce cost and time</span>
                     </h2>
-                    <p class="detail-copy">
-                      Provide any information you know or leave it blank.
-                      <a href="#faq-tuition">Learn more</a> about ways to reduce your cost and time in our FAQ below.
-                    </p>
                   </div>
-                  <span class="step-copy">Step 2 of 2</span>
+                  <div class="step-header-actions">
+                    <span class="step-copy">Step 2 of 2</span>
+                    <a class="skip-link skip-link-dark" href="#" data-go-view="results">
+                      <span>Skip this step</span>
+                      <svg class="skip-link-icon" viewBox="0 0 14 14" aria-hidden="true" fill="currentColor">
+                        <path d="M8.2 2.2 13 7l-4.8 4.8-1.1-1.1 2.9-2.9H1V6.2h9L7.1 3.3l1.1-1.1Z" />
+                      </svg>
+                    </a>
+                  </div>
                 </div>
-
-                <a class="skip-link" href="#" data-go-view="results">
-                  <span>Skip this step</span>
-                  <img class="skip-link-icon" src="./assets/right-arrow.svg" alt="" />
-                </a>
 
                 <div class="detail-grid">
                   <article class="detail-row">
@@ -242,6 +244,7 @@
                         type="number"
                         min="0"
                         value="0"
+                        data-step-two-key="transferCredits"
                         inputmode="numeric"
                         aria-label="Transfer credits"
                       />
@@ -265,6 +268,7 @@
                         type="number"
                         min="0"
                         value="0"
+                        data-step-two-key="grants"
                         inputmode="numeric"
                         aria-label="Annual grants amount"
                       />
@@ -274,7 +278,7 @@
                   <article class="detail-row">
                     <div>
                       <h3>Scholarships</h3>
-                      <p class="detail-question">How much do you expect to receive each year in scholarship?</p>
+                      <p class="detail-question">How much do you expect to receive each year in scholarships?</p>
                       <p class="detail-note">
                         Scholarships are often merit-based awards you don't pay back.
                         <a href="#faq-tuition">Learn more about scholarships.</a>
@@ -287,6 +291,7 @@
                         type="number"
                         min="0"
                         value="0"
+                        data-step-two-key="scholarships"
                         inputmode="numeric"
                         aria-label="Annual scholarships amount"
                       />
@@ -308,6 +313,7 @@
                         type="number"
                         min="0"
                         value="0"
+                        data-step-two-key="employerBenefit"
                         inputmode="numeric"
                         aria-label="Annual employer tuition benefit amount"
                       />
@@ -316,8 +322,13 @@
                 </div>
 
                 <div class="detail-actions">
-                  <button class="ghost-link" type="button" data-go-view="resident">Back</button>
-                  <button class="round-cta" type="button" data-go-view="results">View cost breakdown</button>
+                  <button class="ghost-link" type="button" data-go-view="resident">&#8592; Back</button>
+                  <button class="round-cta" type="button" data-go-view="results">
+                    <span>View cost breakdown</span>
+                    <svg class="button-icon" viewBox="0 0 14 14" aria-hidden="true">
+                      <path d="M8.2 2.2 13 7l-4.8 4.8-1.1-1.1 2.9-2.9H1V6.2h9L7.1 3.3l1.1-1.1Z" />
+                    </svg>
+                  </button>
                 </div>
               </section>
 
@@ -329,8 +340,8 @@
 
                 <div class="summary-grid">
                   <div class="price-panel">
-                    <p class="summary-label">Your semester total for 12 credits:</p>
-                    <p class="price-total">$3,296</p>
+                    <p class="summary-label" data-summary-label>Your semester total for 12 credits:</p>
+                    <p class="price-total" data-summary-price>$6,515</p>
                   </div>
                   <div class="metric-stack">
                     <div class="metric-card">
@@ -355,7 +366,7 @@
                       <img class="metric-icon" src="./assets/cost.svg" alt="" aria-hidden="true" />
                       <span class="metric-label">Estimated total cost:</span>
                       <span class="metric-value">
-                        <strong>$77,000</strong>
+                        <strong data-summary-total-cost>$13,030</strong>
                         <button
                           class="tooltip-trigger"
                           type="button"
@@ -383,23 +394,23 @@
                     </div>
                     <div class="selection-block">
                       <span>Transfer credits</span>
-                      <strong>24 credits</strong>
+                      <strong data-summary-transfer>0 credits</strong>
                     </div>
                     <div class="selection-block">
                       <span>Credits per semester</span>
-                      <strong>12 credits</strong>
+                      <strong data-summary-credits>0 credits</strong>
                     </div>
                     <div class="selection-block" data-residency-summary hidden>
-                      <span>Arizona resident</span>
-                      <strong data-residency-answer>No</strong>
+                      <span>Residency</span>
+                      <strong data-residency-answer>Non-resident</strong>
                     </div>
                     <div class="selection-block">
                       <span>Grants and scholarships</span>
-                      <strong>$15,000/year</strong>
+                      <strong data-summary-aid>$0/year</strong>
                     </div>
                     <div class="selection-block">
                       <span>Employee tuition benefit</span>
-                      <strong>$0/year</strong>
+                      <strong data-summary-benefit>$0/year</strong>
                     </div>
 
                     <button class="inline-action" type="button" data-edit-results>
@@ -460,17 +471,22 @@
 
                     <div class="edit-group">
                       <label class="edit-label" for="edit-transfer">Transfer credits</label>
-                      <input class="edit-input" id="edit-transfer" type="text" value="24 credits" />
+                      <input class="edit-input" id="edit-transfer" type="number" min="0" value="0" />
                     </div>
 
                     <div class="edit-group">
                       <label class="edit-label" for="edit-grants">Grants</label>
-                      <input class="edit-input" id="edit-grants" type="text" value="$15,000/year" />
+                      <input class="edit-input" id="edit-grants" type="number" min="0" value="0" />
+                    </div>
+
+                    <div class="edit-group">
+                      <label class="edit-label" for="edit-scholarships">Scholarships</label>
+                      <input class="edit-input" id="edit-scholarships" type="number" min="0" value="0" />
                     </div>
 
                     <div class="edit-group">
                       <label class="edit-label" for="edit-employer-benefit">Employer tuition benefit</label>
-                      <input class="edit-input" id="edit-employer-benefit" type="text" value="$0/year" />
+                      <input class="edit-input" id="edit-employer-benefit" type="number" min="0" value="0" />
                     </div>
 
                     <button class="inline-action recalculate-action" type="button" data-recalculate-results>
@@ -485,59 +501,63 @@
                       <span>Include summers</span>
                     </label>
 
-                    <div class="term-card is-open">
-                      <button class="term-header" type="button" aria-expanded="true">
+
+                    <!-- Figma-aligned breakdown: -->
+                    <div class="term-card">
+                      <button class="term-header" type="button" aria-expanded="false">
                         <span>Fall 2026</span>
-                        <span class="term-price">$3,296</span>
+                        <span class="term-price">$6,515</span>
                         <span class="term-chevron">⌄</span>
                       </button>
-                      <div class="term-body">
-                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$3,444</strong></div>
-                        <div class="cost-row"><span>Undergraduate College Fee 4</span><strong>$744</strong></div>
-                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$46</strong></div>
-                        <div class="cost-row"><span>Grants, Scholarships, Employer Benefit</span><strong class="credit-green">- $938</strong></div>
-                        <div class="cost-row total-row"><span>Total</span><strong>$3,296</strong></div>
+                      <div class="term-body" hidden>
+                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$5,911</strong></div>
+                        <div class="cost-row"><span>Undergraduate College Fee 2</span><strong>$528</strong></div>
+                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$76</strong></div>
+                        <div class="cost-row total-row"><span>Total</span><strong>$6,515</strong></div>
                       </div>
                     </div>
 
                     <div class="term-card">
                       <button class="term-header" type="button" aria-expanded="false">
                         <span>Fall 2027</span>
-                        <span class="term-price">$3,296</span>
+                        <span class="term-price">$6,515</span>
                         <span class="term-chevron">⌄</span>
                       </button>
                       <div class="term-body" hidden>
-                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$3,444</strong></div>
-                        <div class="cost-row"><span>Undergraduate College Fee 4</span><strong>$744</strong></div>
-                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$46</strong></div>
-                        <div class="cost-row"><span>Grants, Scholarships, Employer Benefit</span><strong class="credit-green">- $938</strong></div>
-                        <div class="cost-row total-row"><span>Total</span><strong>$3,296</strong></div>
+                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$5,911</strong></div>
+                        <div class="cost-row"><span>Undergraduate College Fee 2</span><strong>$528</strong></div>
+                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$76</strong></div>
+                        <div class="cost-row total-row"><span>Total</span><strong>$6,515</strong></div>
                       </div>
                     </div>
 
                     <div class="term-card">
                       <button class="term-header" type="button" aria-expanded="false">
                         <span>Summer 2027</span>
-                        <span class="term-price">$3,296</span>
+                        <span class="term-price">$6,515</span>
                         <span class="term-chevron">⌄</span>
                       </button>
                       <div class="term-body" hidden>
-                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$3,444</strong></div>
-                        <div class="cost-row"><span>Undergraduate College Fee 4</span><strong>$744</strong></div>
-                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$46</strong></div>
-                        <div class="cost-row"><span>Grants, Scholarships, Employer Benefit</span><strong class="credit-green">- $938</strong></div>
-                        <div class="cost-row total-row"><span>Total</span><strong>$3,296</strong></div>
+                        <div class="cost-row"><span>Arizona Resident Online Tuition</span><strong>$5,911</strong></div>
+                        <div class="cost-row"><span>Undergraduate College Fee 2</span><strong>$528</strong></div>
+                        <div class="cost-row"><span>Student Initiated Fees</span><strong>$76</strong></div>
+                        <div class="cost-row total-row"><span>Total</span><strong>$6,515</strong></div>
                       </div>
+                    </div>
+
+                    <div class="credit-green">
+                      <span>Grants and scholarships</span>
+                      <span>$15,000</span>
                     </div>
 
                     <div class="year-total">
                       <span>Academic Year Total</span>
-                      <strong>$9,888</strong>
+                      <strong>$13,030</strong>
                     </div>
 
                     <div class="disclaimer-card">
                       <p>
-                        This is not a bill. This is only an estimate. This may not be accurate.
+                        **This is not a bill. This is only an estimate. This may not be accurate.
                         <a href="#">Talk with your enrollment coach.</a>
                         Special class fees are dependent on specific class enrollment and are not included here.
                       </p>
@@ -945,6 +965,6 @@
       </p>
     </div>
 
-    <script src="./script.js?v=resident-faq-1"></script>
+    <script src="./script.js?v=tuition-updates-2"></script>
   </body>
 </html>

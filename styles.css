@@ -1,7 +1,7 @@
 :root {
   --asu-maroon: #8c1d40;
   --asu-gold: #ffc627;
-  --asu-green: #78be20;
+  --asu-green: #498500;
   --asu-blue: #00a3e0;
   --asu-orange: #ff7f32;
   --asu-gray: #747474;
@@ -25,8 +25,8 @@
   --estimator-disabled-text: #747474;
   --text-muted: #6a6a6a;
   --text-light: #909090;
-  --green: var(--asu-green);
-  --green-highlight: var(--asu-green);
+  --green: #498500;
+  --green-highlight: #498500;
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
   --radius-xl: 34px;
   --radius-lg: 22px;
@@ -322,7 +322,23 @@ a {
 }
 
 .detail-title span {
-  background: var(--asu-green);
+  background: #78be20;
+}
+
+.step-header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.step-header-actions .skip-link {
+  margin: 0;
+}
+
+[data-view-panel="step-two"] .panel-header {
+  align-items: flex-end;
 }
 
 .next-step-copy span {
@@ -384,11 +400,11 @@ body[data-view="resident"] .estimator-card {
 }
 
 body[data-view="results"] .estimator-card {
-  min-height: 1130px;
+  min-height: auto;
 }
 
 body[data-view="results"][data-results-mode="edit"] .estimator-card {
-  min-height: 1346px;
+  min-height: auto;
 }
 
 .estimator-view {
@@ -818,16 +834,34 @@ body[data-view="resident"] .panel-actions {
   font-size: 0.95rem;
 }
 
+
 .skip-link {
-  display: flex;
-  justify-content: flex-end;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.45rem;
   margin: 0.75rem 0 1.15rem;
-  text-align: right;
+  padding: 0.65rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  text-align: center;
   font-size: 1rem;
   font-weight: 700;
   color: var(--asu-maroon);
+  transition: background 0.18s, color 0.18s;
+}
+
+.skip-link-dark {
+  background: #191919 !important;
+  color: #fafafa !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.skip-link-dark:hover {
+  background: #333 !important;
+  color: #fafafa !important;
 }
 
 .skip-link-icon {
@@ -839,7 +873,7 @@ body[data-view="resident"] .panel-actions {
 .detail-grid {
   display: grid;
   gap: 0;
-  margin-top: 1.5rem;
+  margin-top: 32px;
   padding-top: 0;
 }
 
@@ -1319,7 +1353,14 @@ body[data-results-mode="edit"] .selection-editor {
 }
 
 .credit-green {
-  color: var(--green);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(73, 133, 0, 0.14);
+  border: 1px solid #498500;
+  color: #191919;
+  font-weight: 700;
 }
 
 .total-row strong {
@@ -1338,7 +1379,7 @@ body[data-results-mode="edit"] .selection-editor {
   color: #fff;
   font-size: 1rem;
   font-weight: 700;
-  margin-top: 0;
+  margin-top: 16px;
 }
 
 .disclaimer-card {
