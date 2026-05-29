@@ -18,7 +18,7 @@ const detailInputs = document.querySelectorAll(".detail-input");
 const stepOneNextButtons = document.querySelectorAll('[data-go-view="step-two"]');
 const editResultsButtons = document.querySelectorAll("[data-edit-results]");
 const recalculateResultsButtons = document.querySelectorAll("[data-recalculate-results]");
-const editStudentTypeSelect = document.getElementById("edit-student-type");
+const editStudentTypeSelect = document.getElementById("edit-credits-per-semester");
 const editResidentSelect = document.getElementById("edit-resident");
 const editTransferInput = document.getElementById("edit-transfer");
 const editGrantsInput = document.getElementById("edit-grants");
