@@ -280,7 +280,15 @@ viewTriggers.forEach((trigger) => {
       trigger.dataset.goView === "resident" && !isFullTimeStudent() ? "step-one" : trigger.dataset.goView;
 
     setView(targetView);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    if (targetView === "results") {
+      const scrollTarget = document.querySelector(".gross-cost-row") || document.getElementById("savings-accordion");
+      requestAnimationFrame(() => {
+        scrollTarget?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   });
 });
 
