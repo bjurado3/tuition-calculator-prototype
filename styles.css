@@ -1297,7 +1297,7 @@ body[data-results-mode="edit"] .selection-editor {
 .term-header {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: auto 1fr auto;
   gap: 1rem;
   align-items: center;
   padding: 1rem 1.1rem;
@@ -2095,6 +2095,10 @@ body[data-view="results"] .restart-link {
   width: 100%;
 }
 
+.breakdown-divider--spaced {
+  margin: 16px 0;
+}
+
 .gross-cost-row {
   display: flex;
   justify-content: space-between;
@@ -2114,7 +2118,7 @@ body[data-view="results"] .restart-link {
   position: relative;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: auto 1fr auto;
   gap: 1rem;
   align-items: center;
   padding: 1rem 1.1rem;
