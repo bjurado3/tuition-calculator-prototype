@@ -543,3 +543,120 @@ syncNextButtonState();
 syncResultsFromState();
 closeAllSelects();
 setView("step-one");
+
+/* ── Savings accordion ────────────────────────────────────────── */
+
+const GROSS_COST = 13030;
+
+const savingsAccordionEl = document.getElementById("savings-accordion");
+const savingsHeaderBtn = document.getElementById("savings-header-btn");
+const savingsBodyEl = document.getElementById("savings-body");
+const savingsFillEl = document.querySelector(".savings-fill");
+const priceTotalEl = document.querySelector(".price-total");
+const yearTotalRowEl = document.getElementById("year-total-row");
+const savingsTotalEl = document.querySelector("[data-savings-total]");
+const savingsGrantsEl = document.querySelector("[data-savings-grants]");
+const savingsEmployerEl = document.querySelector("[data-savings-employer]");
+const savingsEmployerRowEl = document.getElementById("savings-employer-row");
+const yearTotalAmountEl = document.querySelector("[data-year-total-amount]");
+
+let savingsAnimationPlayed = false;
+let savingsObserverAttached = false;
+
+function syncSavingsFromState() {
+  const grantsTotal = estimatorState.grants + estimatorState.scholarships;
+  const employerTotal = estimatorState.employerBenefit;
+  const totalSavings = grantsTotal + employerTotal;
+  const netTotal = Math.max(0, GROSS_COST - totalSavings);
+
+  if (savingsTotalEl) {
+    savingsTotalEl.textContent = `−$${formatCurrency(totalSavings)}`;
+  }
+  if (savingsGrantsEl) {
+    savingsGrantsEl.textContent = `−$${formatCurrency(grantsTotal)}`;
+  }
+  if (savingsEmployerEl) {
+    savingsEmployerEl.textContent = `−$${formatCurrency(employerTotal)}`;
+  }
+  if (savingsEmployerRowEl) {
+    savingsEmployerRowEl.hidden = employerTotal === 0;
+  }
+  if (yearTotalAmountEl) {
+    yearTotalAmountEl.textContent = `$${formatCurrency(netTotal)}`;
+  }
+}
+
+function triggerSavingsAnimation() {
+  if (savingsAnimationPlayed) return;
+  savingsAnimationPlayed = true;
+
+  if (savingsFillEl && savingsHeaderBtn) {
+    savingsFillEl.style.height = savingsHeaderBtn.offsetHeight + "px";
+  }
+
+  if (savingsHeaderBtn) {
+    savingsHeaderBtn.classList.add("is-animating");
+  }
+
+  setTimeout(() => {
+    if (priceTotalEl) priceTotalEl.style.opacity = "1";
+    if (yearTotalRowEl) yearTotalRowEl.style.opacity = "1";
+  }, 1800);
+}
+
+function initSavingsAnimation() {
+  if (savingsAnimationPlayed) return;
+
+  if (priceTotalEl && !priceTotalEl.style.transition) {
+    priceTotalEl.style.transition = "opacity 0.5s ease";
+  }
+  if (priceTotalEl) priceTotalEl.style.opacity = "0";
+
+  if (yearTotalRowEl && !yearTotalRowEl.style.transition) {
+    yearTotalRowEl.style.transition = "opacity 0.5s ease";
+  }
+  if (yearTotalRowEl) yearTotalRowEl.style.opacity = "0";
+
+  if (savingsObserverAttached || !savingsAccordionEl) return;
+  savingsObserverAttached = true;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          triggerSavingsAnimation();
+          observer.disconnect();
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(savingsAccordionEl);
+}
+
+if (savingsHeaderBtn && savingsBodyEl) {
+  savingsHeaderBtn.addEventListener("click", () => {
+    const isOpen = !savingsAccordionEl.classList.contains("is-open");
+    savingsAccordionEl.classList.toggle("is-open", isOpen);
+    savingsHeaderBtn.setAttribute("aria-expanded", String(isOpen));
+    savingsBodyEl.hidden = !isOpen;
+  });
+}
+
+/* Hook savings sync into existing state updates */
+const _origSyncResults = syncResultsFromState;
+syncResultsFromState = function () {
+  _origSyncResults();
+  syncSavingsFromState();
+};
+
+/* Hook animation init into setView */
+const _origSetView = setView;
+setView = function (view) {
+  _origSetView(view);
+  if (view === "results") {
+    syncSavingsFromState();
+    initSavingsAnimation();
+  }
+};

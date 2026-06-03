@@ -539,14 +539,33 @@
                       </div>
                     </div>
 
-                    <div class="credit-green">
-                      <span>Grants and scholarships</span>
-                      <span>$15,000</span>
+                    <div class="gross-cost-row">
+                      <span>Gross academic year cost</span>
+                      <span data-gross-cost>$13,030</span>
                     </div>
 
-                    <div class="year-total">
-                      <span>Academic Year Total</span>
-                      <strong>$13,030</strong>
+                    <div class="savings-accordion" id="savings-accordion">
+                      <button class="savings-header" type="button" aria-expanded="false" id="savings-header-btn">
+                        <span class="savings-chevron" aria-hidden="true"></span>
+                        <span class="savings-header-label">Savings applied</span>
+                        <span class="savings-header-amount" data-savings-total>−$0</span>
+                        <div class="savings-fill" aria-hidden="true"></div>
+                      </button>
+                      <div class="savings-body" id="savings-body" hidden>
+                        <div class="savings-sub-row">
+                          <span>Grants and scholarships</span>
+                          <span data-savings-grants>−$0</span>
+                        </div>
+                        <div class="savings-sub-row" id="savings-employer-row" hidden>
+                          <span>Employee benefits tuition</span>
+                          <span data-savings-employer>−$0</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="year-total-row" id="year-total-row">
+                      <span>Estimated academic year total</span>
+                      <strong class="year-total-amount" data-year-total-amount>$13,030</strong>
                     </div>
 
                     <div class="disclaimer-card">
