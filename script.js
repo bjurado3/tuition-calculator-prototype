@@ -554,7 +554,7 @@ setView("step-one");
 
 /* ── Savings accordion ────────────────────────────────────────── */
 
-const GROSS_COST = 13030;
+const SEMESTER_COST = 6515;
 
 const savingsAccordionEl = document.getElementById("savings-accordion");
 const savingsHeaderBtn = document.getElementById("savings-header-btn");
@@ -567,15 +567,24 @@ const savingsGrantsEl = document.querySelector("[data-savings-grants]");
 const savingsEmployerEl = document.querySelector("[data-savings-employer]");
 const savingsEmployerRowEl = document.getElementById("savings-employer-row");
 const yearTotalAmountEl = document.querySelector("[data-year-total-amount]");
+const grossCostEl = document.querySelector("[data-gross-cost]");
+const summaryTotalCostEl = document.querySelector("[data-summary-total-cost]");
+const summerTermCardEl = document.getElementById("summer-term-card");
+const summerToggleCheckbox = document.querySelector(".summer-toggle input");
 
 let savingsAnimationPlayed = false;
 let savingsObserverAttached = false;
+let summerIncluded = true;
+
+function getGrossCost() {
+  return (summerIncluded ? 3 : 2) * SEMESTER_COST;
+}
 
 function syncSavingsFromState() {
   const grantsTotal = estimatorState.grants + estimatorState.scholarships;
   const employerTotal = estimatorState.employerBenefit;
   const totalSavings = grantsTotal + employerTotal;
-  const netTotal = Math.max(0, GROSS_COST - totalSavings);
+  const netTotal = Math.max(0, getGrossCost() - totalSavings);
 
   if (savingsTotalEl) {
     savingsTotalEl.textContent = `−$${formatCurrency(totalSavings)}`;
@@ -592,6 +601,30 @@ function syncSavingsFromState() {
   if (yearTotalAmountEl) {
     yearTotalAmountEl.textContent = `$${formatCurrency(netTotal)}`;
   }
+}
+
+function syncSummerFromState() {
+  if (summerTermCardEl) {
+    summerTermCardEl.hidden = !summerIncluded;
+  }
+
+  const gross = getGrossCost();
+
+  if (grossCostEl) {
+    grossCostEl.textContent = `$${formatCurrency(gross)}`;
+  }
+  if (summaryTotalCostEl) {
+    summaryTotalCostEl.textContent = `$${formatCurrency(gross)}`;
+  }
+
+  syncSavingsFromState();
+}
+
+if (summerToggleCheckbox) {
+  summerToggleCheckbox.addEventListener("change", () => {
+    summerIncluded = summerToggleCheckbox.checked;
+    syncSummerFromState();
+  });
 }
 
 function triggerSavingsAnimation() {
@@ -656,7 +689,7 @@ if (savingsHeaderBtn && savingsBodyEl) {
 const _origSyncResults = syncResultsFromState;
 syncResultsFromState = function () {
   _origSyncResults();
-  syncSavingsFromState();
+  syncSummerFromState();
 };
 
 /* Hook animation init into setView */
@@ -664,7 +697,7 @@ const _origSetView = setView;
 setView = function (view) {
   _origSetView(view);
   if (view === "results") {
-    syncSavingsFromState();
+    syncSummerFromState();
     initSavingsAnimation();
   }
 };
