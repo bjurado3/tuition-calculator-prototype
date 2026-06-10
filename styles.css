@@ -508,6 +508,28 @@ body[data-view="results"][data-results-mode="edit"] .estimator-card {
   font-weight: 700;
 }
 
+/* Keep selected values on one line with truncation instead of wrapping */
+.inline-select.has-selection .line-select {
+  white-space: nowrap;
+  overflow-wrap: initial;
+}
+
+.inline-select.has-selection .line-select-label {
+  display: inline-block;
+  max-width: min(480px, calc(100vw - 140px));
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+/* Program: show as much of the name as possible within the card, then truncate.
+   Card content area is 808px (920px card − 56px × 2 padding).
+   680px gives ~90% of "environmental and sustainability studies" visible before "…". */
+.inline-select[data-select="program"].has-selection .line-select-label {
+  max-width: min(680px, calc(100vw - 140px));
+}
+
 .inline-select.is-open .line-select {
   outline: 0;
 }
@@ -692,26 +714,28 @@ body[data-view="resident"] .inline-select[data-select="enrollment-status"] .line
 }
 
 .residency-row {
-  display: grid;
-  grid-template-columns: max-content max-content;
-  justify-content: start;
-  align-items: start;
-  column-gap: 32px;
   border-top: 1px solid var(--line-gray);
   margin-top: 32px;
   padding: 32px 0 0;
 }
 
 .residency-question {
-  margin: 0;
+  margin: 0 0 0;
   font-size: 36px;
-  font-weight: 400;
-  line-height: 43.2px;
-  color: var(--estimator-disabled-text);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #484848;
+}
+
+.residency-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
 }
 
 .help-copy {
-  max-width: 430px;
+  max-width: 680px;
   margin: 18px 0 0;
   font-size: 16px;
 }
@@ -741,10 +765,88 @@ body[data-view="resident"] .inline-select[data-select="enrollment-status"] .line
   text-decoration-thickness: 2px;
 }
 
+/* ── Graduate certificate result panel ───────────────────────────── */
+
+.cert-result-grid {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.cert-headline-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.cert-headline {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--asu-black);
+}
+
+.cert-price-col {
+  flex-shrink: 0;
+}
+
+.cert-price {
+  display: block;
+  font-size: 8.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--asu-green);
+}
+
+.cert-asterisk {
+  font-size: 0.45em;
+  font-weight: 700;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.cert-divider {
+  border: 0;
+  border-top: 1px solid var(--line-gray);
+  margin: 0 0 32px;
+}
+
+.cert-learn-more {
+  margin: 0 0 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--asu-black);
+}
+
+.cert-program-link {
+  color: var(--asu-maroon);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.cert-footnote {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.cert-footnote a {
+  color: var(--asu-maroon);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* ── /Graduate certificate result panel ──────────────────────────── */
+
 .toggle-group {
   display: flex;
-  gap: 26px;
-  padding-top: 3px;
+  gap: 16px;
 }
 
 .toggle-button {
@@ -753,22 +855,19 @@ body[data-view="resident"] .inline-select[data-select="enrollment-status"] .line
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 69px;
-  height: 46px;
+  padding: 0 16px;
+  height: 50px;
   min-width: 0;
   min-height: 0;
-  border-radius: 4px;
+  border-radius: 0;
   border: 1px solid #d0d0d0;
   background: #fff;
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 1;
   font-weight: 700;
   color: var(--estimator-disabled-text);
   box-shadow: 0 1.64286px 3.28572px rgba(0, 0, 0, 0.25);
-}
-
-.toggle-button:nth-child(2) {
-  width: 64px;
+  white-space: nowrap;
 }
 
 .toggle-button::after {
@@ -794,8 +893,8 @@ body[data-view="resident"] .inline-select[data-select="enrollment-status"] .line
 .toggle-button.is-selected::before {
   content: "";
   position: absolute;
-  right: 13px;
-  top: 17px;
+  right: 18px;
+  top: 19px;
   width: 8px;
   height: 5px;
   border-left: 2px solid var(--asu-maroon);
@@ -1412,7 +1511,8 @@ body[data-results-mode="edit"] .selection-editor {
   padding: var(--section-space) 0 0;
 }
 
-body[data-view="results"] .next-step-section {
+body[data-view="results"] .next-step-section,
+body[data-view="cert-result"] .next-step-section {
   padding-top: 32px;
 }
 
@@ -1505,7 +1605,8 @@ body[data-view="results"] .next-step-section {
   text-decoration-thickness: 2px;
 }
 
-body[data-view="results"] .restart-link {
+body[data-view="results"] .restart-link,
+body[data-view="cert-result"] .restart-link {
   display: flex;
 }
 
@@ -2269,10 +2370,15 @@ body[data-view="results"] .restart-link {
 
   .utility-links,
   .panel-header,
-  .residency-row,
   .footer-bottom-row {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .residency-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
   }
 
   .nav-row {
@@ -2428,8 +2534,7 @@ body[data-view="results"] .restart-link {
     font-size: 1rem;
   }
 
-  .line-row,
-  .residency-question {
+  .line-row {
     font-size: 1.85rem;
     line-height: 1.2;
   }
@@ -2467,4 +2572,258 @@ body[data-view="results"] .restart-link {
   .credit-display {
     min-height: 58px;
   }
+}
+
+/* ── Residency / tuition widget (FAQ: out-of-state tuition item) ──
+   All rules namespaced under .residency-widget — nothing leaks into
+   other accordion items. */
+
+.residency-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 8px;
+}
+
+.residency-widget .rw-title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 28.8px;
+  font-weight: 700;
+  letter-spacing: -0.84px;
+  color: #191919;
+}
+
+.residency-widget .rw-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.residency-widget .rw-body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: #191919;
+}
+
+.residency-widget .rw-body strong {
+  font-weight: 700;
+}
+
+.residency-widget .rw-divider {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid #d0d0d0;
+}
+
+.residency-widget .rw-link {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--asu-maroon);
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+}
+
+.residency-widget .rw-footnote {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: #747474;
+}
+
+.residency-widget .rw-controls {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.residency-widget .rw-control-label {
+  margin: 0 0 20px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #191919;
+}
+
+.residency-widget .rw-pills {
+  display: flex;
+  gap: 16px;
+}
+
+.residency-widget .rw-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background: #fafafa;
+  border: 1px solid #d0d0d0;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #191919;
+  white-space: nowrap;
+}
+
+.residency-widget .rw-pill.is-selected {
+  background: var(--asu-maroon);
+  border-color: var(--asu-maroon);
+  color: #fafafa;
+}
+
+.residency-widget .rw-radio {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #b9b9b9;
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+.residency-widget .rw-pill.is-selected .rw-radio {
+  border-color: #fafafa;
+  background: transparent;
+}
+
+.residency-widget .rw-pill.is-selected .rw-radio::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #fafafa;
+}
+
+.residency-widget .rw-level {
+  display: inline-flex;
+  align-items: stretch;
+  height: 48px;
+  padding: 4px;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 100px;
+}
+
+.residency-widget .rw-level-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  min-width: 110px;
+  border-radius: 100px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #747474;
+  background: transparent;
+}
+
+.residency-widget .rw-level-tab.is-selected {
+  background: #191919;
+  color: #fafafa;
+}
+
+.residency-widget .rw-pill:focus-visible,
+.residency-widget .rw-level-tab:focus-visible {
+  outline: 2px solid #191919;
+  outline-offset: 2px;
+}
+
+.residency-widget .rw-chart {
+  margin-top: 8px;
+}
+
+.residency-widget .rw-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.residency-widget .rw-chart text {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.residency-widget .rw-chart .rw-line,
+.residency-widget .rw-chart .rw-fill {
+  transition: d 400ms ease;
+}
+
+.residency-widget .rw-chart .rw-cap-group,
+.residency-widget .rw-chart .rw-cap-group circle {
+  transition: opacity 300ms ease;
+}
+
+@media (max-width: 640px) {
+  .residency-widget .rw-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .residency-widget .rw-pills {
+    width: 100%;
+  }
+
+  .residency-widget .rw-pill {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .residency-widget .rw-level {
+    width: 100%;
+  }
+
+  .residency-widget .rw-level-tab {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.exceptions-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(calc(100% - 32px), 608px);
+  padding: 48px 40px 40px;
+  background: #fff;
+  z-index: 30;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
+}
+
+.exceptions-modal h2 {
+  margin: 0 0 24px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--asu-black);
+  padding-right: 32px;
+}
+
+.exceptions-list {
+  margin: 0 0 24px;
+  padding-left: 24px;
+}
+
+.exceptions-list li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--asu-black);
+}
+
+.exceptions-list li:last-child {
+  margin-bottom: 0;
+}
+
+.exceptions-footer {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--asu-maroon);
 }

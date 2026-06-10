@@ -48,7 +48,7 @@
 
                 <div class="form-lines">
                   <div class="line-row">
-                    <span class="line-copy">I'm seeking a</span>
+                    <span class="line-copy" data-degree-prefix>I'm seeking a</span>
                     <div class="inline-select" data-select="degree-type">
                       <button class="line-select" type="button" aria-haspopup="listbox" aria-expanded="false">
                         <span class="line-select-label" data-select-label>select a degree type</span>
@@ -77,6 +77,7 @@
                         <button class="select-option" type="button" data-value="applied computing">Applied Computing</button>
                         <button class="select-option" type="button" data-value="applied ethics in the professions">Applied Ethics in the Professions</button>
                         <button class="select-option" type="button" data-value="architectural studies">Architectural Studies</button>
+                        <button class="select-option" type="button" data-value="environmental and sustainability studies">Environmental and Sustainability Studies</button>
                       </div>
                     </div>
                   </div>
@@ -89,7 +90,7 @@
                       <div class="select-menu" role="listbox" hidden>
                         <button class="select-option select-option-stacked" type="button" data-value="part-time student">
                           <span class="select-option-title">Part-time student</span>
-                          <span class="select-option-note">Typically 6 credits per semester</span>
+                          <span class="select-option-note">up to 6 credits per semester</span>
                         </button>
                         <button class="select-option select-option-stacked" type="button" data-value="full-time student">
                           <span class="select-option-title">Full-time student</span>
@@ -126,7 +127,7 @@
 
                 <div class="form-lines">
                   <div class="line-row">
-                    <span class="line-copy">I'm seeking a</span>
+                    <span class="line-copy" data-degree-prefix>I'm seeking a</span>
                     <div class="inline-select" data-select="degree-type">
                       <button class="line-select" type="button" aria-haspopup="listbox" aria-expanded="false">
                         <span class="line-select-label" data-select-label>select a degree type</span>
@@ -155,6 +156,7 @@
                         <button class="select-option" type="button" data-value="applied computing">Applied Computing</button>
                         <button class="select-option" type="button" data-value="applied ethics in the professions">Applied Ethics in the Professions</button>
                         <button class="select-option" type="button" data-value="architectural studies">Architectural Studies</button>
+                        <button class="select-option" type="button" data-value="environmental and sustainability studies">Environmental and Sustainability Studies</button>
                       </div>
                     </div>
                   </div>
@@ -167,7 +169,7 @@
                       <div class="select-menu" role="listbox" hidden>
                         <button class="select-option select-option-stacked" type="button" data-value="part-time student">
                           <span class="select-option-title">Part-time student</span>
-                          <span class="select-option-note">Typically 6 credits per semester</span>
+                          <span class="select-option-note">up to 6 credits per semester</span>
                         </button>
                         <button class="select-option select-option-stacked" type="button" data-value="full-time student">
                           <span class="select-option-title">Full-time student</span>
@@ -183,29 +185,26 @@
                 </div>
 
                 <div class="residency-row">
-                  <div>
-                    <p class="residency-question">and I'm an Arizona resident</p>
-                    <p class="help-copy" data-resident-help="no">
-                      We don't have out-of-state tuition up to 11 credit hours.
-                      <a href="#faq-out-of-state-tuition" data-open-faq>Learn more.</a>
-                    </p>
-                    <p class="help-copy" data-resident-help="yes" hidden>
-                      Your tuition will be capped at <strong>11 credit hours</strong> each semester, meaning your tuition will not increase with any additional credits you take.
-                    </p>
+                  <h3 class="residency-question">What is your Arizona residency status?</h3>
+                  <p class="help-copy" data-resident-help="no">
+                    We don&rsquo;t have out-of-state tuition. But, Arizona residents enjoy a tuition cap where they don&rsquo;t have to pay for additional credits after they&rsquo;re enrolled in <strong>11 credit hours</strong>.
+                    <a href="#faq-out-of-state-tuition" data-open-faq>Learn more</a>
+                  </p>
+                  <p class="help-copy" data-resident-help="yes" hidden>
+                    Your tuition will be capped at <strong>11 credit hours</strong> each semester, meaning your tuition will not increase with any additional credits you take.
+                  </p>
+                  <div class="residency-bottom">
+                    <div class="toggle-group" aria-label="Arizona residency">
+                      <button class="toggle-button" type="button" data-value="yes">I&rsquo;m an Arizona resident</button>
+                      <button class="toggle-button is-selected" type="button" data-value="no">I&rsquo;m an out-of-state resident</button>
+                    </div>
+                    <button class="round-cta" type="button" data-go-view="step-two" disabled aria-disabled="true">
+                      <span>Next</span>
+                      <svg class="button-icon" viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M8.2 2.2 13 7l-4.8 4.8-1.1-1.1 2.9-2.9H1V6.2h9L7.1 3.3l1.1-1.1Z" />
+                      </svg>
+                    </button>
                   </div>
-                  <div class="toggle-group" aria-label="Arizona residency">
-                    <button class="toggle-button" type="button">Yes</button>
-                    <button class="toggle-button is-selected" type="button">No</button>
-                  </div>
-                </div>
-
-                <div class="panel-actions">
-                  <button class="round-cta" type="button" data-go-view="step-two" disabled aria-disabled="true">
-                    <span>Next</span>
-                    <svg class="button-icon" viewBox="0 0 14 14" aria-hidden="true">
-                      <path d="M8.2 2.2 13 7l-4.8 4.8-1.1-1.1 2.9-2.9H1V6.2h9L7.1 3.3l1.1-1.1Z" />
-                    </svg>
-                  </button>
                 </div>
               </section>
 
@@ -302,7 +301,7 @@
                     <div>
                       <h3>Employer tuition benefit</h3>
                       <p class="detail-question">
-                        Do you have an employer that offers a tuition coverage or reimbursement each year?
+                        How much in tuition might your employer be covering or reimbursing each year?
                       </p>
                       <p class="detail-note">Some employers help with tuition costs.</p>
                     </div>
@@ -340,7 +339,7 @@
 
                 <div class="summary-grid">
                   <div class="price-panel">
-                    <p class="summary-label" data-summary-label>Your semester total for 12 credits:</p>
+                    <p class="summary-label" data-summary-label>Your estimated academic year total:</p>
                     <p class="price-total" data-summary-price>$6,515</p>
                   </div>
                   <div class="metric-stack">
@@ -364,7 +363,7 @@
                     </div>
                     <div class="metric-card">
                       <img class="metric-icon" src="./assets/cost.svg" alt="" aria-hidden="true" />
-                      <span class="metric-label">Estimated total cost:</span>
+                      <span class="metric-label">Estimated program cost:</span>
                       <span class="metric-value">
                         <strong data-summary-total-cost>$13,030</strong>
                         <button
@@ -583,6 +582,31 @@
                   </div>
                 </div>
               </section>
+
+              <!-- Graduate certificate result screen -->
+              <section class="estimator-view" data-view-panel="cert-result">
+                <div class="cert-result-grid">
+                  <div class="cert-headline-col">
+                    <h2 class="cert-headline">The cost of the program<br>per credit hour is:</h2>
+                    <button class="round-cta" type="button">
+                      <span>Request info</span>
+                    </button>
+                  </div>
+                  <div class="cert-price-col">
+                    <span class="cert-price">576<sup class="cert-asterisk">*</sup></span>
+                  </div>
+                </div>
+                <hr class="cert-divider" />
+                <p class="cert-learn-more">
+                  Learn more about <a href="#" class="cert-program-link" data-cert-program-link>American Studies (Graduate Certificate)</a>
+                </p>
+                <p class="cert-footnote">
+                  *An additional mandatory Student Initiated Fee and Advanced Technology Fee applies each
+                  semester and varies based on how many credit hours you take.
+                  <a href="#">View ASU's tuition and fees</a>.
+                </p>
+              </section>
+
             </div>
           </div>
         </section>
@@ -675,17 +699,36 @@
                   <span class="faq-icon" aria-hidden="true"></span>
                 </button>
                 <div class="faq-answer">
-                  <p>
-                    There is no out-of-state tuition for up to 11 credit hours each semester.
-                  </p>
-                  <p>
-                    However, Arizona residents benefit from a tuition cap at 11 credit hours. This means your
-                    tuition will not increase with any additional credits you take that semester.
-                  </p>
-                  <p>
-                    Out-of-state students don't receive a tuition cap, so taking a heavier course load each
-                    semester may lead to higher overall tuition costs.
-                  </p>
+                  <div class="residency-widget">
+                    <div class="rw-intro">
+                      <p class="rw-body">
+                        Nonresidents can take up to <strong>11 credit hours</strong> at the same rate as Arizona residents.
+                      </p>
+                      <p class="rw-footnote">*This represents tuition for the 2025-26 academic year, not including fees. Use the tuition calculator above to estimate your total cost with fees. The cost per credit varies for some programs (<a class="rw-link" href="#" data-open-exceptions-modal>see exceptions</a>).</p>
+                    </div>
+                    <hr class="rw-divider" />
+                    <h3 class="rw-title">How does this impact your tuition?</h3>
+                    <div class="rw-controls">
+                      <div class="rw-residency">
+                        <p class="rw-control-label" id="rw-residency-label">What is your current residency?</p>
+                        <div class="rw-pills" role="radiogroup" aria-labelledby="rw-residency-label">
+                          <button class="rw-pill is-selected" type="button" role="radio" aria-checked="true" data-rw-residency="resident">
+                            <span class="rw-radio" aria-hidden="true"></span>
+                            <span>Arizona resident</span>
+                          </button>
+                          <button class="rw-pill" type="button" role="radio" aria-checked="false" data-rw-residency="nonresident">
+                            <span class="rw-radio" aria-hidden="true"></span>
+                            <span>Nonresident</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="rw-level" role="radiogroup" aria-label="Degree level">
+                        <button class="rw-level-tab is-selected" type="button" role="radio" aria-checked="true" data-rw-level="undergraduate">Undergraduate</button>
+                        <button class="rw-level-tab" type="button" role="radio" aria-checked="false" data-rw-level="graduate">Graduate</button>
+                      </div>
+                    </div>
+                    <div class="rw-chart" data-rw-chart></div>
+                  </div>
                 </div>
               </article>
               <article class="faq-item">
@@ -968,6 +1011,22 @@
         <button class="modal-link" type="button" data-close-modal>Cancel</button>
         <button class="round-cta" type="button" id="save-credit-load">Save credit load</button>
       </div>
+    </div>
+
+    <div class="exceptions-modal" role="dialog" aria-modal="true" aria-labelledby="exceptions-modal-title" hidden>
+      <button class="modal-close" type="button" aria-label="Close" data-close-modal>×</button>
+      <h2 id="exceptions-modal-title">Programs that do not follow the standard cost per credit:</h2>
+      <ul class="exceptions-list">
+        <li>Graduate Certificates</li>
+        <li>Business Administration (W. P. Carey MBA &#8211; Online Program), MBA</li>
+        <li>Computer Science, MCS</li>
+        <li>Computer Science (Big Data Systems) MCS</li>
+        <li>Computer Science (Cybersecurity) MCS</li>
+        <li>Nursing, RN to BSN</li>
+        <li>Nursing, RN to BSN (Concurrent Enrollment Program)</li>
+        <li>Supply Chain Management, MS</li>
+      </ul>
+      <p class="exceptions-footer">Please use the tuition calculator to find the cost per credit for these programs.</p>
     </div>
 
     <div class="fees-modal" role="dialog" aria-modal="true" aria-labelledby="fees-modal-title" hidden>

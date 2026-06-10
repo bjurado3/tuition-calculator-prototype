@@ -7,6 +7,7 @@ const faqOpenLinks = document.querySelectorAll("[data-open-faq]");
 const modalBackdrop = document.querySelector(".modal-backdrop");
 const creditModal = document.querySelector(".credit-modal");
 const feesModal = document.querySelector(".fees-modal");
+const exceptionsModal = document.querySelector(".exceptions-modal");
 const closeModalButtons = document.querySelectorAll("[data-close-modal]");
 const feesModalTriggers = document.querySelectorAll("[data-open-fees-modal]");
 const creditCountNode = document.getElementById("credit-count");
@@ -98,7 +99,7 @@ const summaryLabel = document.querySelector("[data-summary-label]");
 
 function syncSummaryFromState() {
   if (summaryLabel) {
-    summaryLabel.textContent = `Your semester total for ${getCreditsPerSemesterLabel()}:`;
+    summaryLabel.textContent = "Your estimated academic year total:";
   }
 
   if (summaryTransfer) {
@@ -158,10 +159,52 @@ function syncResultsFromState() {
   syncEditResidencyVisibility();
 }
 
+const enrollmentCopyByDegree = {
+  graduate: {
+    "full-time student": "9+ credits per semester",
+    "part-time student": "up to 5 credits per semester",
+  },
+  undergraduate: {
+    "full-time student": "12+ credits per semester",
+    "part-time student": "up to 6 credits per semester",
+  },
+};
+
+function syncEnrollmentCopy() {
+  const isGrad = estimatorState["degree-type"] === "graduate degree";
+  const copy = isGrad ? enrollmentCopyByDegree.graduate : enrollmentCopyByDegree.undergraduate;
+
+  document.querySelectorAll('.inline-select[data-select="enrollment-status"]').forEach((select) => {
+    Object.entries(copy).forEach(([value, note]) => {
+      const noteEl = select.querySelector(`.select-option[data-value="${value}"] .select-option-note`);
+      if (noteEl) noteEl.textContent = note;
+    });
+  });
+}
+
+function isGradCert() {
+  return estimatorState["degree-type"] === "graduate certificate";
+}
+
+function getArticleForDegreeType(degreeType) {
+  return /^[aeiou]/i.test(degreeType) ? "an" : "a";
+}
+
+function syncDegreePrefixes() {
+  const degreeType = estimatorState["degree-type"];
+  const isDefault = degreeType === defaultSelectValues["degree-type"];
+  const article = isDefault ? "a" : getArticleForDegreeType(degreeType);
+
+  document.querySelectorAll("[data-degree-prefix]").forEach((el) => {
+    el.textContent = `I'm seeking ${article}`;
+  });
+}
+
 function syncSelectLabels() {
   inlineSelects.forEach((select) => {
     const selectName = select.dataset.select;
     const label = select.querySelector("[data-select-label]");
+    const button = select.querySelector(".line-select");
     const hasSelection = estimatorState[selectName] !== defaultSelectValues[selectName];
 
     select.classList.toggle("has-selection", hasSelection);
@@ -171,7 +214,7 @@ function syncSelectLabels() {
       if (label) {
         label.textContent =
           estimatorState.credits > 0
-            ? `Custom: ${estimatorState.credits} credits`
+            ? `student taking ${estimatorState.credits} credits`
             : defaultSelectValues["enrollment-status"];
       }
       return;
@@ -180,6 +223,39 @@ function syncSelectLabels() {
     if (label) {
       label.textContent = estimatorState[selectName];
     }
+
+    if (selectName === "program" && button) {
+      if (hasSelection) {
+        button.setAttribute("title", estimatorState[selectName]);
+      } else {
+        button.removeAttribute("title");
+      }
+    }
+  });
+
+  syncDegreePrefixes();
+  syncCertProgram();
+  syncEnrollmentCopy();
+}
+
+function syncCertProgram() {
+  const certLinks = document.querySelectorAll("[data-cert-program-link]");
+  if (!certLinks.length) return;
+
+  const programValue = estimatorState["program"];
+  const defaultProgram = defaultSelectValues["program"];
+  if (programValue === defaultProgram) return;
+
+  // Use the option's display text (already properly cased) rather than the lowercase state value
+  const matchingOption = document.querySelector(
+    `.inline-select[data-select="program"] .select-option[data-value="${programValue}"]`
+  );
+  const displayName = matchingOption
+    ? matchingOption.textContent.trim()
+    : programValue.replace(/\b\w/g, (c) => c.toUpperCase());
+
+  certLinks.forEach((link) => {
+    link.textContent = `${displayName} (Graduate Certificate)`;
   });
 }
 
@@ -214,6 +290,17 @@ function closeModal() {
   if (feesModal) {
     feesModal.hidden = true;
   }
+
+  if (exceptionsModal) {
+    exceptionsModal.hidden = true;
+  }
+}
+
+function openExceptionsModal() {
+  creditModal.hidden = true;
+  if (feesModal) feesModal.hidden = true;
+  modalBackdrop.hidden = false;
+  exceptionsModal.hidden = false;
 }
 
 function openFeesModal() {
@@ -276,8 +363,13 @@ viewTriggers.forEach((trigger) => {
       return;
     }
 
-    const targetView =
-      trigger.dataset.goView === "resident" && !isFullTimeStudent() ? "step-one" : trigger.dataset.goView;
+    const goView = trigger.dataset.goView;
+    // Graduate certificate bypasses step-two entirely and shows the cert result screen
+    const targetView = isGradCert() && goView === "step-two"
+      ? "cert-result"
+      : goView === "resident" && !isFullTimeStudent()
+        ? "step-one"
+        : goView;
 
     setView(targetView);
 
@@ -447,8 +539,16 @@ inlineSelects.forEach((select) => {
       syncNextButtonState();
       closeAllSelects();
 
+      if (select.dataset.select === "degree-type" && isGradCert()) {
+        // If the user is on the resident panel and switches to grad cert, return to step-one
+        if (body.dataset.view === "resident") {
+          setView("step-one");
+        }
+      }
+
       if (select.dataset.select === "enrollment-status") {
-        if (option.dataset.value === "full-time student") {
+        // Graduate certificate skips the resident panel — stay on step-one
+        if (option.dataset.value === "full-time student" && !isGradCert()) {
           setView("resident");
         } else {
           setView("step-one");
@@ -500,6 +600,13 @@ closeModalButtons.forEach((button) => {
   button.addEventListener("click", closeModal);
 });
 
+document.querySelectorAll("[data-open-exceptions-modal]").forEach((el) => {
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    openExceptionsModal();
+  });
+});
+
 modalBackdrop.addEventListener("click", closeModal);
 document.addEventListener("click", () => {
   closeAllSelects();
@@ -538,7 +645,7 @@ document.querySelectorAll(".toggle-group").forEach((group) => {
     button.addEventListener("click", () => {
       buttons.forEach((item) => item.classList.remove("is-selected"));
       button.classList.add("is-selected");
-      estimatorState["resident-choice"] = button.textContent.trim().toLowerCase();
+      estimatorState["resident-choice"] = button.dataset.value;
       syncResidentHelp(estimatorState["resident-choice"]);
       syncResultsFromState();
     });
@@ -547,6 +654,8 @@ document.querySelectorAll(".toggle-group").forEach((group) => {
 
 renderCreditCount();
 syncSelectLabels();
+syncDegreePrefixes();
+syncEnrollmentCopy();
 syncNextButtonState();
 syncResultsFromState();
 closeAllSelects();
@@ -701,3 +810,283 @@ setView = function (view) {
     initSavingsAnimation();
   }
 };
+
+/* ── Start over ───────────────────────────────────────────────────── */
+
+function resetEstimatorState() {
+  // Reset all selections to defaults
+  estimatorState["degree-type"] = defaultSelectValues["degree-type"];
+  estimatorState["program"] = defaultSelectValues["program"];
+  estimatorState["enrollment-status"] = defaultSelectValues["enrollment-status"];
+  estimatorState["resident-choice"] = "no";
+  estimatorState.credits = 0;
+  estimatorState.transferCredits = 0;
+  estimatorState.grants = 0;
+  estimatorState.scholarships = 0;
+  estimatorState.employerBenefit = 0;
+
+  // Reset resident toggle buttons to default "No" selected
+  document.querySelectorAll(".toggle-group").forEach((group) => {
+    group.querySelectorAll(".toggle-button").forEach((btn) => {
+      btn.classList.toggle("is-selected", btn.dataset.value === "no");
+    });
+  });
+  syncResidentHelp("no");
+
+  // Reset savings animation so it plays again on the next results view
+  savingsAnimationPlayed = false;
+  savingsObserverAttached = false;
+
+  syncSelectLabels();
+  syncDegreePrefixes();
+  syncNextButtonState();
+  renderCreditCount();
+}
+
+document.querySelectorAll(".restart-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    resetEstimatorState();
+  });
+});
+
+/* ── Residency / tuition widget (FAQ: out-of-state tuition item) ── */
+
+/* PLACEHOLDER RATES — swap in real 25/26 per-credit numbers here. */
+const residencyWidgetConfig = {
+  rates: {
+    undergraduate: { perCredit: 537.36, capCredits: 11 },
+    graduate: { perCredit: 766.27, capCredits: 11 },
+  },
+  maxCredits: 18,
+  yMax: 15000,
+  yStep: 3000,
+};
+
+(function initResidencyWidget() {
+  const widget = document.querySelector(".residency-widget");
+  const chartHost = widget?.querySelector("[data-rw-chart]");
+
+  if (!widget || !chartHost) {
+    return;
+  }
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const MAROON = "#8c1d40";
+  const state = { residency: "resident", level: "undergraduate" };
+  const mobileQuery = window.matchMedia("(max-width: 640px)");
+
+  const layouts = {
+    desktop: {
+      width: 1100, height: 440,
+      margin: { top: 24, right: 36, bottom: 64, left: 84 },
+      fontSize: 12, tickEvery: 1,
+    },
+    mobile: {
+      width: 380, height: 320,
+      margin: { top: 16, right: 22, bottom: 56, left: 64 },
+      fontSize: 11, tickEvery: 3,
+    },
+  };
+
+  function el(name, attrs, textContent) {
+    const node = document.createElementNS(SVG_NS, name);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+    if (textContent !== undefined) {
+      node.textContent = textContent;
+    }
+    return node;
+  }
+
+  function formatMoney(value) {
+    return `$${Math.round(value).toLocaleString("en-US")}`;
+  }
+
+  function getSeries() {
+    const cfg = residencyWidgetConfig;
+    const { perCredit, capCredits } = cfg.rates[state.level];
+    const capTuition = perCredit * capCredits;
+    const endTuition = state.residency === "resident" ? capTuition : perCredit * cfg.maxCredits;
+    return { perCredit, capCredits, capTuition, endTuition };
+  }
+
+  function chartAriaLabel() {
+    const { capCredits, capTuition } = getSeries();
+    const level = state.level === "undergraduate" ? "undergraduate" : "graduate";
+    return state.residency === "resident"
+      ? `Line chart of estimated ${level} tuition per semester by credit load. As an Arizona resident, tuition rises per credit until ${capCredits} credit hours (${formatMoney(capTuition)}), then stays flat: additional credits do not increase tuition.`
+      : `Line chart of estimated ${level} tuition per semester by credit load. As a nonresident, tuition keeps increasing with each credit through ${residencyWidgetConfig.maxCredits} credits, with no tuition cap.`;
+  }
+
+  let refs = null;
+
+  function buildChart() {
+    const cfg = residencyWidgetConfig;
+    const L = mobileQuery.matches ? layouts.mobile : layouts.desktop;
+    const plotW = L.width - L.margin.left - L.margin.right;
+    const plotH = L.height - L.margin.top - L.margin.bottom;
+    const x = (credits) => L.margin.left + (credits / cfg.maxCredits) * plotW;
+    const y = (tuition) => L.margin.top + (1 - tuition / cfg.yMax) * plotH;
+
+    const svg = el("svg", {
+      viewBox: `0 0 ${L.width} ${L.height}`,
+      role: "img",
+      "aria-label": chartAriaLabel(),
+    });
+
+    const defs = el("defs", {});
+    const gradient = el("linearGradient", { id: "rw-fill-gradient", x1: "0", y1: "0", x2: "0", y2: "1" });
+    gradient.appendChild(el("stop", { offset: "0%", "stop-color": MAROON, "stop-opacity": "0.14" }));
+    gradient.appendChild(el("stop", { offset: "100%", "stop-color": MAROON, "stop-opacity": "0" }));
+    defs.appendChild(gradient);
+    const marker = el("marker", {
+      id: "rw-arrow", viewBox: "0 0 10 10", refX: "8", refY: "5",
+      markerWidth: "7", markerHeight: "7", orient: "auto-start-reverse",
+    });
+    marker.appendChild(el("path", { d: "M 0 0 L 10 5 L 0 10 z", fill: MAROON }));
+    defs.appendChild(marker);
+    svg.appendChild(defs);
+
+    /* Gridlines + y tick labels */
+    for (let v = 0; v <= cfg.yMax; v += cfg.yStep) {
+      const gy = y(v);
+      svg.appendChild(el("line", {
+        x1: L.margin.left, y1: gy, x2: L.width - L.margin.right, y2: gy,
+        stroke: v === 0 ? "#d0d0d0" : "#e6e6e6", "stroke-width": "1",
+      }));
+      svg.appendChild(el("text", {
+        x: L.margin.left - 10, y: gy + 4, "text-anchor": "end",
+        "font-size": L.fontSize, fill: "#747474",
+      }, `$${v.toLocaleString("en-US")}`));
+    }
+
+    /* X tick labels */
+    for (let c = 0; c <= cfg.maxCredits; c += 1) {
+      if (c % L.tickEvery !== 0) continue;
+      svg.appendChild(el("text", {
+        x: x(c), y: y(0) + 22, "text-anchor": "middle",
+        "font-size": L.fontSize, fill: "#747474",
+      }, String(c)));
+    }
+
+    /* Axis titles */
+    const yTitleX = 16;
+    const yTitleY = L.margin.top + plotH / 2;
+    svg.appendChild(el("text", {
+      x: yTitleX, y: yTitleY, "text-anchor": "middle",
+      "font-size": L.fontSize, "font-weight": "700", fill: "#747474",
+      transform: `rotate(-90 ${yTitleX} ${yTitleY})`,
+    }, "Tuition*"));
+    svg.appendChild(el("text", {
+      x: L.margin.left + plotW / 2, y: L.height - 10, "text-anchor": "middle",
+      "font-size": L.fontSize, "font-weight": "700", fill: "#747474",
+    }, "Credits per semester"));
+
+    /* Series */
+    const fill = el("path", { class: "rw-fill", fill: "url(#rw-fill-gradient)", stroke: "none" });
+    const line = el("path", {
+      class: "rw-line", fill: "none", stroke: MAROON,
+      "stroke-width": "2.5", "stroke-linejoin": "round",
+    });
+    svg.appendChild(fill);
+    svg.appendChild(line);
+
+    /* Cap annotations (dashed line, dot, tooltip chip) */
+    const capGroup = el("g", { class: "rw-cap-group" });
+    const dash = el("line", {
+      stroke: "#b9b9b9", "stroke-width": "1.5", "stroke-dasharray": "4 5",
+    });
+    const dot = el("circle", { r: "7", fill: MAROON, stroke: "#fff", "stroke-width": "2" });
+    const chip = el("g", { class: "rw-chip" });
+    const chipW = 104;
+    const chipH = 46;
+    chip.appendChild(el("rect", {
+      width: chipW, height: chipH, rx: "4",
+      fill: "#fafafa", stroke: "#d0d0d0", "stroke-width": "1",
+    }));
+    chip.appendChild(el("text", { x: 9, y: 19, "font-size": "11", fill: "#747474" }, "Credits"));
+    const chipCredits = el("text", {
+      x: 60, y: 19, "font-size": "11", "font-weight": "700", fill: "#191919",
+    });
+    chip.appendChild(chipCredits);
+    chip.appendChild(el("text", { x: 9, y: 37, "font-size": "11", fill: "#747474" }, "Tuition*"));
+    const chipTuition = el("text", {
+      x: 60, y: 37, "font-size": "11", "font-weight": "700", fill: "#191919",
+    });
+    chip.appendChild(chipTuition);
+    capGroup.appendChild(dash);
+    capGroup.appendChild(dot);
+    capGroup.appendChild(chip);
+    svg.appendChild(capGroup);
+
+    chartHost.replaceChildren(svg);
+    refs = { svg, fill, line, capGroup, dash, dot, chip, chipCredits, chipTuition, x, y, L, chipW, chipH };
+  }
+
+  function updateChart() {
+    const cfg = residencyWidgetConfig;
+    const { capCredits, capTuition, endTuition } = getSeries();
+    const { svg, fill, line, capGroup, dash, dot, chip, chipCredits, chipTuition, x, y, L, chipW, chipH } = refs;
+    const isResident = state.residency === "resident";
+
+    const x0 = x(0);
+    const y0 = y(0);
+    const xCap = x(capCredits);
+    const yCap = y(capTuition);
+    const xEnd = x(cfg.maxCredits);
+    const yEnd = y(endTuition);
+
+    line.setAttribute("d", `M ${x0} ${y0} L ${xCap} ${yCap} L ${xEnd} ${yEnd}`);
+    fill.setAttribute("d", `M ${x0} ${y0} L ${xCap} ${yCap} L ${xEnd} ${yEnd} L ${xEnd} ${y0} L ${x0} ${y0} Z`);
+
+    if (isResident) {
+      line.setAttribute("marker-end", "url(#rw-arrow)");
+    } else {
+      line.removeAttribute("marker-end");
+    }
+
+    dot.style.opacity = isResident ? "1" : "0";
+    dash.setAttribute("x1", xCap);
+    dash.setAttribute("x2", xCap);
+    dash.setAttribute("y1", L.margin.top);
+    dash.setAttribute("y2", y0);
+    dot.setAttribute("cx", xCap);
+    dot.setAttribute("cy", yCap);
+    chip.setAttribute("transform", `translate(${xCap - chipW - 14} ${yCap - chipH - 8})`);
+    chipCredits.textContent = String(capCredits);
+    chipTuition.textContent = formatMoney(capTuition);
+
+    svg.setAttribute("aria-label", chartAriaLabel());
+  }
+
+  widget.querySelectorAll("[data-rw-residency]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.residency = button.dataset.rwResidency;
+      widget.querySelectorAll("[data-rw-residency]").forEach((pill) => {
+        const selected = pill === button;
+        pill.classList.toggle("is-selected", selected);
+        pill.setAttribute("aria-checked", String(selected));
+      });
+      updateChart();
+    });
+  });
+
+  widget.querySelectorAll("[data-rw-level]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.level = button.dataset.rwLevel;
+      widget.querySelectorAll("[data-rw-level]").forEach((tab) => {
+        const selected = tab === button;
+        tab.classList.toggle("is-selected", selected);
+        tab.setAttribute("aria-checked", String(selected));
+      });
+      updateChart();
+    });
+  });
+
+  mobileQuery.addEventListener("change", () => {
+    buildChart();
+    updateChart();
+  });
+
+  buildChart();
+  updateChart();
+})();
