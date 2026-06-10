@@ -733,6 +733,19 @@
               </article>
               <article class="faq-item">
                 <button class="faq-button" type="button">
+                  <span>How many transfer credits does ASU accept?</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq-answer">
+                  <p>
+                    We accept up to 64 transfer credits for undergraduate programs, which can help reduce the amount
+                    of time it takes to graduate at ASU.
+                    <a href="https://asuonline.asu.edu/admission/transfer/" target="_blank" rel="noopener noreferrer">Learn more about our transfer credits</a>.
+                  </p>
+                </div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-button" type="button">
                   <span>What are the fees included with my tuition estimate?</span>
                   <span class="faq-icon" aria-hidden="true"></span>
                 </button>
@@ -1001,12 +1014,26 @@
       <div class="credit-stepper">
         <button class="stepper-button" type="button" data-credit-change="-1">−</button>
         <div class="credit-display">
-          <span id="credit-count">0</span>
+          <input
+            id="credit-count"
+            class="credit-input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="65"
+            value="0"
+            aria-label="Credits"
+            aria-describedby="credit-limit-error"
+          />
         </div>
         <button class="stepper-button" type="button" data-credit-change="1">+</button>
       </div>
       <p class="credit-label">credits</p>
       <p class="credit-helper">3 credits typically equals 1 course.</p>
+      <div class="credit-error" id="credit-limit-error" role="alert" aria-live="assertive" hidden>
+        <img class="credit-error-icon" src="./assets/icon-triangle-exclamation-solid.svg" alt="" aria-hidden="true" />
+        <p>You can’t transfer more than 64 credits to ASU.</p>
+      </div>
       <div class="modal-actions">
         <button class="modal-link" type="button" data-close-modal>Cancel</button>
         <button class="round-cta" type="button" id="save-credit-load">Save credit load</button>

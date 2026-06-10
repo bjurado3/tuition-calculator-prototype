@@ -11,6 +11,8 @@ const exceptionsModal = document.querySelector(".exceptions-modal");
 const closeModalButtons = document.querySelectorAll("[data-close-modal]");
 const feesModalTriggers = document.querySelectorAll("[data-open-fees-modal]");
 const creditCountNode = document.getElementById("credit-count");
+const creditDisplay = document.querySelector(".credit-display");
+const creditLimitError = document.getElementById("credit-limit-error");
 const creditChangeButtons = document.querySelectorAll("[data-credit-change]");
 const saveCreditLoadButton = document.getElementById("save-credit-load");
 const inlineSelects = document.querySelectorAll(".inline-select");
@@ -34,6 +36,8 @@ const residencySummary = document.querySelector("[data-residency-summary]");
 const residencyAnswer = document.querySelector("[data-residency-answer]");
 const termHeaders = document.querySelectorAll(".term-header");
 const tooltipTriggers = document.querySelectorAll(".tooltip-trigger");
+const MAX_TRANSFER_CREDITS = 64;
+const MAX_CREDIT_STEPPER_VALUE = MAX_TRANSFER_CREDITS + 1;
 
 const defaultSelectValues = {
   "degree-type": "select a degree type",
@@ -314,8 +318,40 @@ function openFeesModal() {
   feesModal.hidden = false;
 }
 
-function renderCreditCount() {
-  creditCountNode.textContent = String(estimatorState.credits);
+function renderCreditCount(syncInput = true) {
+  if (syncInput && creditCountNode && creditCountNode.value !== String(estimatorState.credits)) {
+    creditCountNode.value = String(estimatorState.credits);
+  }
+
+  const isOverCreditLimit = estimatorState.credits > MAX_TRANSFER_CREDITS;
+
+  if (creditLimitError) {
+    creditLimitError.hidden = !isOverCreditLimit;
+  }
+
+  if (creditDisplay) {
+    creditDisplay.classList.toggle("is-invalid", isOverCreditLimit);
+    creditDisplay.setAttribute("aria-invalid", String(isOverCreditLimit));
+  }
+
+  if (creditCountNode) {
+    creditCountNode.setAttribute("aria-invalid", String(isOverCreditLimit));
+  }
+
+  creditChangeButtons.forEach((button) => {
+    const change = Number(button.dataset.creditChange);
+    const isDisabled =
+      (change < 0 && estimatorState.credits <= 0) ||
+      (change > 0 && estimatorState.credits >= MAX_CREDIT_STEPPER_VALUE);
+
+    button.disabled = isDisabled;
+    button.setAttribute("aria-disabled", String(isDisabled));
+  });
+
+  if (saveCreditLoadButton) {
+    saveCreditLoadButton.disabled = isOverCreditLimit;
+    saveCreditLoadButton.setAttribute("aria-disabled", String(isOverCreditLimit));
+  }
 }
 
 function syncDetailInputWidth(input) {
@@ -617,12 +653,31 @@ closeAllSelects();
 creditChangeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     estimatorState.credits += Number(button.dataset.creditChange);
-    estimatorState.credits = Math.max(0, estimatorState.credits);
+    estimatorState.credits = Math.max(0, Math.min(MAX_CREDIT_STEPPER_VALUE, estimatorState.credits));
     renderCreditCount();
   });
 });
 
+creditCountNode.addEventListener("input", () => {
+  if (creditCountNode.value === "") {
+    estimatorState.credits = 0;
+    renderCreditCount(false);
+    return;
+  }
+
+  const rawValue = Number(creditCountNode.value);
+  estimatorState.credits = Number.isFinite(rawValue)
+    ? Math.max(0, Math.min(MAX_CREDIT_STEPPER_VALUE, rawValue))
+    : 0;
+  renderCreditCount();
+});
+
 saveCreditLoadButton.addEventListener("click", () => {
+  if (estimatorState.credits > MAX_TRANSFER_CREDITS) {
+    renderCreditCount();
+    return;
+  }
+
   estimatorState["enrollment-status"] = "custom";
   syncSelectLabels();
   syncNextButtonState();
@@ -872,7 +927,7 @@ const residencyWidgetConfig = {
 
   const SVG_NS = "http://www.w3.org/2000/svg";
   const MAROON = "#8c1d40";
-  const state = { residency: "resident", level: "undergraduate" };
+  const state = { residency: "resident", level: "undergraduate", hoverCredits: null };
   const mobileQuery = window.matchMedia("(max-width: 640px)");
 
   const layouts = {
@@ -909,6 +964,12 @@ const residencyWidgetConfig = {
     return { perCredit, capCredits, capTuition, endTuition };
   }
 
+  function getTuitionForCredits(credits) {
+    const { perCredit, capCredits, capTuition } = getSeries();
+    const tuition = perCredit * credits;
+    return state.residency === "resident" ? Math.min(tuition, capTuition) : tuition;
+  }
+
   function chartAriaLabel() {
     const { capCredits, capTuition } = getSeries();
     const level = state.level === "undergraduate" ? "undergraduate" : "graduate";
@@ -930,6 +991,7 @@ const residencyWidgetConfig = {
     const svg = el("svg", {
       viewBox: `0 0 ${L.width} ${L.height}`,
       role: "img",
+      tabindex: "0",
       "aria-label": chartAriaLabel(),
     });
 
@@ -990,7 +1052,7 @@ const residencyWidgetConfig = {
     svg.appendChild(fill);
     svg.appendChild(line);
 
-    /* Cap annotations (dashed line, dot, tooltip chip) */
+    /* Hover annotation (dashed line, dot, tooltip chip) */
     const capGroup = el("g", { class: "rw-cap-group" });
     const dash = el("line", {
       stroke: "#b9b9b9", "stroke-width": "1.5", "stroke-dasharray": "4 5",
@@ -1018,14 +1080,69 @@ const residencyWidgetConfig = {
     capGroup.appendChild(chip);
     svg.appendChild(capGroup);
 
+    const hitArea = el("rect", {
+      class: "rw-hit-area",
+      x: L.margin.left,
+      y: L.margin.top,
+      width: plotW,
+      height: plotH,
+      fill: "transparent",
+      tabindex: "-1",
+    });
+    svg.appendChild(hitArea);
+
     chartHost.replaceChildren(svg);
-    refs = { svg, fill, line, capGroup, dash, dot, chip, chipCredits, chipTuition, x, y, L, chipW, chipH };
+    refs = { svg, fill, line, capGroup, dash, dot, chip, chipCredits, chipTuition, x, y, L, plotW, chipW, chipH };
+
+    function setCreditsFromPointer(event) {
+      const point = svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      const svgPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+      const rawCredits = ((svgPoint.x - L.margin.left) / plotW) * cfg.maxCredits;
+      state.hoverCredits = Math.max(0, Math.min(cfg.maxCredits, Math.round(rawCredits)));
+      updateChart();
+    }
+
+    hitArea.addEventListener("pointerenter", setCreditsFromPointer);
+    hitArea.addEventListener("pointermove", setCreditsFromPointer);
+    hitArea.addEventListener("pointerleave", () => {
+      state.hoverCredits = null;
+      updateChart();
+    });
+
+    svg.addEventListener("focus", () => {
+      state.hoverCredits = state.hoverCredits ?? getSeries().capCredits;
+      updateChart();
+    });
+
+    svg.addEventListener("blur", () => {
+      state.hoverCredits = null;
+      updateChart();
+    });
+
+    svg.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+        return;
+      }
+      event.preventDefault();
+      const currentCredits = state.hoverCredits ?? getSeries().capCredits;
+      if (event.key === "Home") {
+        state.hoverCredits = 0;
+      } else if (event.key === "End") {
+        state.hoverCredits = cfg.maxCredits;
+      } else {
+        const direction = event.key === "ArrowLeft" ? -1 : 1;
+        state.hoverCredits = Math.max(0, Math.min(cfg.maxCredits, currentCredits + direction));
+      }
+      updateChart();
+    });
   }
 
   function updateChart() {
     const cfg = residencyWidgetConfig;
     const { capCredits, capTuition, endTuition } = getSeries();
-    const { svg, fill, line, capGroup, dash, dot, chip, chipCredits, chipTuition, x, y, L, chipW, chipH } = refs;
+    const { svg, fill, line, capGroup, dash, dot, chip, chipCredits, chipTuition, x, y, L, plotW, chipW, chipH } = refs;
     const isResident = state.residency === "resident";
 
     const x0 = x(0);
@@ -1044,16 +1161,24 @@ const residencyWidgetConfig = {
       line.removeAttribute("marker-end");
     }
 
-    dot.style.opacity = isResident ? "1" : "0";
-    dash.setAttribute("x1", xCap);
-    dash.setAttribute("x2", xCap);
+    const activeCredits = state.hoverCredits ?? capCredits;
+    const activeTuition = getTuitionForCredits(activeCredits);
+    const activeX = x(activeCredits);
+    const activeY = y(activeTuition);
+    const chipGap = 14;
+    const chipX = Math.max(L.margin.left + 4, Math.min(activeX - chipW - chipGap, L.margin.left + plotW - chipW - 4));
+    const chipY = Math.max(L.margin.top + 4, activeY - chipH - 8);
+
+    dot.style.opacity = "1";
+    dash.setAttribute("x1", activeX);
+    dash.setAttribute("x2", activeX);
     dash.setAttribute("y1", L.margin.top);
     dash.setAttribute("y2", y0);
-    dot.setAttribute("cx", xCap);
-    dot.setAttribute("cy", yCap);
-    chip.setAttribute("transform", `translate(${xCap - chipW - 14} ${yCap - chipH - 8})`);
-    chipCredits.textContent = String(capCredits);
-    chipTuition.textContent = formatMoney(capTuition);
+    dot.setAttribute("cx", activeX);
+    dot.setAttribute("cy", activeY);
+    chip.setAttribute("transform", `translate(${chipX} ${chipY})`);
+    chipCredits.textContent = String(activeCredits);
+    chipTuition.textContent = formatMoney(activeTuition);
 
     svg.setAttribute("aria-label", chartAriaLabel());
   }
@@ -1061,6 +1186,7 @@ const residencyWidgetConfig = {
   widget.querySelectorAll("[data-rw-residency]").forEach((button) => {
     button.addEventListener("click", () => {
       state.residency = button.dataset.rwResidency;
+      state.hoverCredits = null;
       widget.querySelectorAll("[data-rw-residency]").forEach((pill) => {
         const selected = pill === button;
         pill.classList.toggle("is-selected", selected);
@@ -1073,6 +1199,7 @@ const residencyWidgetConfig = {
   widget.querySelectorAll("[data-rw-level]").forEach((button) => {
     button.addEventListener("click", () => {
       state.level = button.dataset.rwLevel;
+      state.hoverCredits = null;
       widget.querySelectorAll("[data-rw-level]").forEach((tab) => {
         const selected = tab === button;
         tab.classList.toggle("is-selected", selected);
@@ -1083,6 +1210,7 @@ const residencyWidgetConfig = {
   });
 
   mobileQuery.addEventListener("change", () => {
+    state.hoverCredits = null;
     buildChart();
     updateChart();
   });
