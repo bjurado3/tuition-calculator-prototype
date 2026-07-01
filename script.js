@@ -269,6 +269,9 @@ function syncEnrollmentRowVisibility() {
   document.querySelectorAll('.line-row:has([data-select="enrollment-status"])').forEach((row) => {
     row.hidden = hide;
   });
+  document.querySelectorAll(".estimator-card").forEach((card) => {
+    card.style.minHeight = hide ? "auto" : "";
+  });
   // Auto-assign a default enrollment status for grad cert so downstream logic works
   if (hide && estimatorState["enrollment-status"] === defaultSelectValues["enrollment-status"]) {
     estimatorState["enrollment-status"] = "full-time student";
