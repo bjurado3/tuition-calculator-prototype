@@ -240,6 +240,7 @@ function syncSelectLabels() {
   syncDegreePrefixes();
   syncCertProgram();
   syncEnrollmentCopy();
+  syncEnrollmentRowVisibility();
 }
 
 function syncCertProgram() {
@@ -263,8 +264,22 @@ function syncCertProgram() {
   });
 }
 
+function syncEnrollmentRowVisibility() {
+  const hide = isGradCert();
+  document.querySelectorAll('.line-row:has([data-select="enrollment-status"])').forEach((row) => {
+    row.hidden = hide;
+  });
+  // Auto-assign a default enrollment status for grad cert so downstream logic works
+  if (hide && estimatorState["enrollment-status"] === defaultSelectValues["enrollment-status"]) {
+    estimatorState["enrollment-status"] = "full-time student";
+  }
+}
+
 function hasStepOneSelection() {
-  return ["degree-type", "program", "enrollment-status"].every(
+  const required = isGradCert()
+    ? ["degree-type", "program"]
+    : ["degree-type", "program", "enrollment-status"];
+  return required.every(
     (selectName) => estimatorState[selectName] !== defaultSelectValues[selectName]
   );
 }
@@ -685,14 +700,6 @@ saveCreditLoadButton.addEventListener("click", () => {
   setView("step-one");
 });
 
-const residentHelpNo = document.querySelector('[data-resident-help="no"]');
-const residentHelpYes = document.querySelector('[data-resident-help="yes"]');
-
-function syncResidentHelp(choice) {
-  if (residentHelpNo) residentHelpNo.hidden = choice === "yes";
-  if (residentHelpYes) residentHelpYes.hidden = choice !== "yes";
-}
-
 document.querySelectorAll(".toggle-group").forEach((group) => {
   const buttons = group.querySelectorAll(".toggle-button");
 
@@ -701,7 +708,6 @@ document.querySelectorAll(".toggle-group").forEach((group) => {
       buttons.forEach((item) => item.classList.remove("is-selected"));
       button.classList.add("is-selected");
       estimatorState["resident-choice"] = button.dataset.value;
-      syncResidentHelp(estimatorState["resident-choice"]);
       syncResultsFromState();
     });
   });
@@ -744,11 +750,15 @@ function getGrossCost() {
   return (summerIncluded ? 3 : 2) * SEMESTER_COST;
 }
 
+const COMPLETION_YEARS = 3.5;
+const ANNUAL_GROSS = 2 * SEMESTER_COST; // academic year = fall + spring
+
 function syncSavingsFromState() {
   const grantsTotal = estimatorState.grants + estimatorState.scholarships;
   const employerTotal = estimatorState.employerBenefit;
   const totalSavings = grantsTotal + employerTotal;
   const netTotal = Math.max(0, getGrossCost() - totalSavings);
+  const annualNet = Math.max(0, ANNUAL_GROSS - totalSavings);
 
   if (savingsTotalEl) {
     savingsTotalEl.textContent = `−$${formatCurrency(totalSavings)}`;
@@ -765,6 +775,12 @@ function syncSavingsFromState() {
   if (yearTotalAmountEl) {
     yearTotalAmountEl.textContent = `$${formatCurrency(netTotal)}`;
   }
+  if (priceTotalEl) {
+    priceTotalEl.textContent = `$${formatCurrency(annualNet)}`;
+  }
+  if (summaryTotalCostEl) {
+    summaryTotalCostEl.textContent = `$${formatCurrency(annualNet * COMPLETION_YEARS)}`;
+  }
 }
 
 function syncSummerFromState() {
@@ -776,9 +792,6 @@ function syncSummerFromState() {
 
   if (grossCostEl) {
     grossCostEl.textContent = `$${formatCurrency(gross)}`;
-  }
-  if (summaryTotalCostEl) {
-    summaryTotalCostEl.textContent = `$${formatCurrency(gross)}`;
   }
 
   syncSavingsFromState();
@@ -880,13 +893,12 @@ function resetEstimatorState() {
   estimatorState.scholarships = 0;
   estimatorState.employerBenefit = 0;
 
-  // Reset resident toggle buttons to default "No" selected
+  // Reset resident toggle buttons — no default selection
   document.querySelectorAll(".toggle-group").forEach((group) => {
     group.querySelectorAll(".toggle-button").forEach((btn) => {
-      btn.classList.toggle("is-selected", btn.dataset.value === "no");
+      btn.classList.remove("is-selected");
     });
   });
-  syncResidentHelp("no");
 
   // Reset savings animation so it plays again on the next results view
   savingsAnimationPlayed = false;
