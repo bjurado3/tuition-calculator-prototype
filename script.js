@@ -754,14 +754,12 @@ function getGrossCost() {
 }
 
 const COMPLETION_YEARS = 3.5;
-const ANNUAL_GROSS = 2 * SEMESTER_COST; // academic year = fall + spring
 
 function syncSavingsFromState() {
   const grantsTotal = estimatorState.grants + estimatorState.scholarships;
   const employerTotal = estimatorState.employerBenefit;
   const totalSavings = grantsTotal + employerTotal;
   const netTotal = Math.max(0, getGrossCost() - totalSavings);
-  const annualNet = Math.max(0, ANNUAL_GROSS - totalSavings);
 
   if (savingsTotalEl) {
     savingsTotalEl.textContent = `−$${formatCurrency(totalSavings)}`;
@@ -779,10 +777,10 @@ function syncSavingsFromState() {
     yearTotalAmountEl.textContent = `$${formatCurrency(netTotal)}`;
   }
   if (priceTotalEl) {
-    priceTotalEl.textContent = `$${formatCurrency(annualNet)}`;
+    priceTotalEl.textContent = `$${formatCurrency(netTotal)}`;
   }
   if (summaryTotalCostEl) {
-    summaryTotalCostEl.textContent = `$${formatCurrency(annualNet * COMPLETION_YEARS)}`;
+    summaryTotalCostEl.textContent = `$${formatCurrency(netTotal * COMPLETION_YEARS)}`;
   }
 }
 
