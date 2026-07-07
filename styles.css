@@ -115,6 +115,11 @@ a {
   margin: 0 auto;
 }
 
+.global-header-art-mobile,
+.global-footer-art-mobile {
+  display: none;
+}
+
 .top-strip {
   background: #ffffff;
   font-size: 0.75rem;
@@ -2591,7 +2596,7 @@ body[data-view="cert-result"] .restart-link {
   }
 
   .line-row {
-    font-size: 1.85rem;
+    font-size: 24px;
     line-height: 1.2;
   }
 
@@ -2834,6 +2839,9 @@ body[data-view="cert-result"] .restart-link {
   .residency-widget .rw-pill {
     flex: 1 1 0;
     justify-content: center;
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
   }
 
   .residency-widget .rw-level {
@@ -2843,6 +2851,49 @@ body[data-view="cert-result"] .restart-link {
   .residency-widget .rw-level-tab {
     flex: 1 1 0;
     min-width: 0;
+  }
+}
+
+/* ── Mobile fixes (phones, ~480px and below) ─────────────────────
+   Additive only: overrides content overflow/tap-target issues that
+   only appear below the existing 640px breakpoint. Desktop and
+   tablet rules above are untouched. */
+@media (max-width: 480px) {
+  .faq-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .metric-card {
+    grid-template-columns: 17px 1fr;
+    row-gap: 6px;
+  }
+
+  .metric-label {
+    white-space: normal;
+  }
+
+  .metric-value {
+    grid-column: 1 / -1;
+    justify-self: start;
+    padding-left: 27px;
+  }
+
+  .edit-select,
+  .edit-input {
+    min-height: 44px;
+  }
+
+  .global-header-art,
+  .global-footer-art {
+    display: none;
+  }
+
+  .global-header-art-mobile,
+  .global-footer-art-mobile {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
   }
 }
 
